@@ -1,0 +1,86 @@
+location /phpMyAdmin {
+	access_log off;
+	alias /usr/share/php/phpMyAdmin;
+	index index.php;
+	location ~ ^/phpMyAdmin/(.*\.(js|css|gif|jpg|png))$ {
+		alias /usr/share/php/phpMyAdmin/$1;
+	}
+
+	location ~ ^/phpMyAdmin(.+\.php)$ {
+		fastcgi_pass php-fpm;
+		include fastcgi_params;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_param SCRIPT_FILENAME /usr/share/php/$uri;
+		fastcgi_index index.php;
+		fastcgi_intercept_errors on;
+	}
+}
+
+location /webmail {
+	access_log off;
+	alias /usr/share/php/roundcubemail;
+	index index.php;
+	location ~ ^/webmail/(.*\.(js|css|gif|jpg|png))$ {
+		alias /usr/share/php/roundcubemail/$1;
+	}
+
+	location ~ ^/webmail/(.+\.php)$ {
+		fastcgi_pass php-fpm;
+		include fastcgi_params;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_param SCRIPT_FILENAME /usr/share/php/roundcubemail/$1;
+		fastcgi_index index.php;
+		fastcgi_intercept_errors on;
+	}
+}
+
+location /webgrind {
+	access_log off;
+	alias /usr/share/php/webgrind;
+	index index.php;
+	location ~ ^/webgrind/(.*\.(js|css|gif|jpg|png))$ {
+		alias /usr/share/php/webgrind/$1;
+	}
+
+	location ~ ^/webgrind(.+\.php)$ {
+		fastcgi_pass php-fpm;
+		include fastcgi_params;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_param SCRIPT_FILENAME /usr/share/php/$uri;
+		fastcgi_index index.php;
+		fastcgi_intercept_errors on;
+	}
+}
+
+location /OpCacheGUI {
+	access_log off;
+	alias /usr/share/php/OpCacheGUI/public;
+	index index.php;
+	location ~ ^/OpCacheGUI/(.*\.(js|css|gif|jpg|png))$ {
+		alias /usr/share/php/OpCacheGUI/public/$1;
+	}
+
+	location ~ ^/OpCacheGUI/(.+\.php)$ {
+		fastcgi_pass php-fpm;
+		include fastcgi_params;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_param SCRIPT_FILENAME /usr/share/php/OpCacheGUI/public/$1;
+		fastcgi_index index.php;
+		fastcgi_intercept_errors on;
+	}
+}
+
+location = /opcache-dashboard.php {
+	access_log off;
+	fastcgi_pass php-fpm;
+	include fastcgi_params;
+	fastcgi_param SCRIPT_FILENAME /usr/share/php/opcache-dashboard.php;
+	fastcgi_index index.php;
+	fastcgi_intercept_errors on;
+}
+
+location ~ ^/server\-(status|ping)$ {
+	access_log off;
+	include fastcgi_params;
+	fastcgi_pass php-fpm;
+}

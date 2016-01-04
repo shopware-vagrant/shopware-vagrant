@@ -17,8 +17,9 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
     2. Change vagrant box domain
 3. ```vagrant up```
 4. Select a repository or setup a new instance (apache ant locally required)
-6. Enter your administrator password for nfs mount or hosts update
-7. Call URL project.name.dev.domain.com/ to start shopware installation
+5. Enter your administrator password for nfs mount or hosts update
+6. Call URL project.name.dev.domain.com/ to start shopware installation
+    1. ```Skip database creation``` in install routine
 8. (Optional) After setup to use grunt ```vagrant provision``` or ```vagrant reload```
 
 ### Credentials
@@ -54,7 +55,7 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 + Opcache Stats (2 different tools)
     * Opcache http://project.name.dev.domain.com/opcache-dashboard.php
     * OpCacheGUI http://project.name.dev.domain.com/OpCacheGUI
-+ roundcubemail http://project.name.dev.domain.com/webmail - All mails are send to development@localhost
++ roundcubemail http://project.name.dev.domain.com/webmail - All mails are forwarded to development@localhost
     * Login via development Password password
 - PHPunit for testing
 - ioncube
@@ -75,16 +76,13 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 
 ### FAQ
 
-#### Do we support Windows as host?
-- No
-
 #### How long takes a new instance?
 - Depends on a lot of factors.
   - HDD/SSD speed
   - Internet connection
-  - Base Debian jessie box already cached
+  - Vagrant box cache
   - Composer caches
-```vagrant up``` 10 to 15 min
+- Fresh ```vagrant up``` normally around 10 to 15 min
 
 #### Why are encrypted disks not supported?
 - NFS does not support encrypted host storage as mount.
@@ -101,6 +99,12 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 #### Startup stops at "Mounting NFS shared folders..."
 - Clear vagrant entries from ```/etc/exports```
 
+#### Why is the database already imported?
+- Git ships no complete dump. Deltas needs to de applied.
+
+#### Is Windows supported as host?
+- No! A lot stuff could go wrong ant, nfs, bash script.
+
 ### Warning
 - Puppet MySQL module is patched to use MariaDB in Debian
 
@@ -110,7 +114,7 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 ```pacman -S apache-ant php vagrant virtualbox```
 
 ### Powered by
-- developed from [Onedrop Solutions](https://1drop.de/)
+- Crafted with love by [Onedrop](https://1drop.de/)
 - based on [FluidTYPO3 Vagrant](https://github.com/FluidTYPO3/FluidTYPO3-Vagrant/)
 
 ### License

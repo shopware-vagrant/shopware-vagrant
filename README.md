@@ -78,35 +78,41 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 #### Do we support Windows as host?
 - No
 
-#### Build time
-- Depends on a lot of factors. HDD/SSD speed, internet connection, composer caches<br />
-```vagrant up``` 10 to 15 min<br />
+#### How long takes a new instance?
+- Depends on a lot of factors.
+  - HDD/SSD speed
+  - Internet connection
+  - Base Debian jessie box already cached
+  - Composer caches
+```vagrant up``` 10 to 15 min
 
-#### Encrypted disk
+#### Why are encrypted disks not supported?
 - NFS does not support encrypted host storage as mount.
 
-#### Local Apache Ant
+#### Why do i need local Apache ant?
 - Composer cache can be used (including token handling form github) and we need no Java with Apache Ant in every VM
 
-#### Copy of Configuration.sample.yaml
-- Configuration.yaml is excluded from git
+#### Why is there a copy of Configuration.sample.yaml?
+- Configuration.yaml is excluded from git.
 
-#### A red error appears in setup
-- Try to run ```vagrant provisionp```. If it can't be resolved, report an issue.
+#### What should i do if a red error appears in provisioning?
+- Try to run ```vagrant provision```. If it can't be resolved, report an issue.
+
+#### Startup stops at "Mounting NFS shared folders..."
+- Clear vagrant entries from ```/etc/exports```
 
 ### Warning
-- Puppet MySQL module is patched to allow Debian MariaDB
-
-### License
-The GNU General Public License can be found at http://www.gnu.org/copyleft/gpl.html
-Please respect separated licences in all used projects.
+- Puppet MySQL module is patched to use MariaDB in Debian
 
 
-## Install OS Packages
-
+## Install required software
 ### Archlinux
 ```pacman -S apache-ant php vagrant virtualbox```
 
 ### Powered by
-- developed by [Onedrop Solutions](https://1drop.de/)
+- developed from [Onedrop Solutions](https://1drop.de/)
 - based on [FluidTYPO3 Vagrant](https://github.com/FluidTYPO3/FluidTYPO3-Vagrant/)
+
+### License
+The GNU General Public License can be found at http://www.gnu.org/copyleft/gpl.html<br />
+Please respect separated licences in all used projects.

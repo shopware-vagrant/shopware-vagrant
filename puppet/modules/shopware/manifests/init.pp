@@ -11,7 +11,7 @@ class shopware {
 
 	exec { 'install-grunt-local':
 		cwd => '/var/www/themes',
-		command => '/usr/bin/npm install',
+		command => '/bin/mkdir -p /home/vagrant/node_modules && /bin/ln -s /home/vagrant/node_modules /var/www/themes/node_modules && /usr/bin/npm install',
 		require => [Exec['install-grunt']]
 	}
 

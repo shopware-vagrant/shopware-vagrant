@@ -16,14 +16,13 @@ class php5 {
 
 	file { '/etc/php5/fpm/pool.d/www.conf':
 		ensure => absent,
-		require => Package['php5-fpm'],
+		require => [Package['php5-fpm'], File['/etc/php5/fpm/pool.d/vagrant.conf']],
 		notify => Service['php5-fpm'],
 	}
 
 	file { '/etc/php5/fpm/pool.d/vagrant.conf':
 		content => template('php5/php5-fpm.erb'),
 		require => Package['php5-fpm'],
-		notify  => Service['php5-fpm'],
 	}
 
 	define php::augeas (

@@ -1,16 +1,18 @@
 ---
 VirtualMachine:
-  #Internal IP e.g. "172.42.42.42"
+  #Internal IP e.g. "172.23.42.42"
   ip: "172.23.42.42"
+  # CPU cores
   cpus: 2
+  # MB RAM
   memory: 2048
-  # Start a with a windows from the Virtualbox
+  # Start a with a window from the Virtualbox
   gui: false
   # Fully qualified domain name e.g. project.name.dev.domain.com
   domain: project.name.dev.domain.com
   #Apt proxy setting for a local mirror or  e.g. http://10.50.101.2:3142
   aptProxy:
-  # To get a IP in local network and share it you need a bridge
+  # To get a IP in your local network to make the VM accessbiable from other devices you need a network bridge
   networkBridge: false
   # Puppet debug and verbose for more information
   puppetDebug: false

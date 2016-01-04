@@ -105,8 +105,14 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 #### Is Windows supported as host?
 - No! A lot stuff could go wrong ant, nfs, bash script.
 
+#### How to debug vagrant and puppet?
+- Enable puppetDebug in Configuration.yaml and vagrant supports argument --debug (a lot of output).
+
+#### How do i access VM from a different device (e.g. mobile testing)?
+- You need to enable network bridge in Configuration.yaml and a working DHCP server in your local network. Don't forget hosts entries.
+
 ### Warning
-- Puppet MySQL module is patched to use MariaDB in Debian
+- Puppet MySQL module is patched to use MariaDB in Debian.
 
 
 ## Install required software

@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	end
 
 	# Change ip: '172.23.23.23' to run more than one VM or replace it with type: 'dhcp' if you need
-	config.vm.network 'private_network', ip: configuration['VirtualMachine']['ip'] ||= '172.23.23.23'
+	config.vm.network 'private_network', ip: configuration['VirtualMachine']['ip'] ||= '172.23.42.42'
 
 	#Disable default mount
 	config.vm.synced_folder '.', '/vagrant', :disabled => true
@@ -96,7 +96,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				:operatingsystem => 'Debian',
 				:osfamily => 'Debian',
 				:osversion => 'jessie',
-				:ip_address => configuration['VirtualMachine']['ip'] ||= '172.42.42.42'
+				:ip_address => configuration['VirtualMachine']['ip'] ||= '172.23.42.42'
 		}
 	end
 	config.vm.provision 'shell', path: 'utils/afterStart.sh', args: '/var/www',  :privileged => false, :run => 'always'

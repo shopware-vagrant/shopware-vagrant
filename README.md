@@ -5,7 +5,7 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 
 ### Requirements
 - Linux, Mac
-- New setup requires Apache Ant (php for composer)
+- New setup requires Apache Ant (php-{gd,curl} for composer)
 - For installation Internet connection with enough broadband
 - We only test with Virtualbox
 - Running local nfs-server
@@ -52,10 +52,10 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 - github sources (Webgrind, Rouncubemail, phpMyAdmin, OpCacheGUI)
 - webgrind - Xdebug profiler gui http://project.name.dev.domain.com/webgrind
 - phpMyAdmin
-+ Opcache Stats (2 different tools)
+- Opcache Stats (2 different tools)
     * Opcache http://project.name.dev.domain.com/opcache-dashboard.php
     * OpCacheGUI http://project.name.dev.domain.com/OpCacheGUI
-+ roundcubemail http://project.name.dev.domain.com/webmail - All mails are forwarded to development@localhost
+- roundcubemail http://project.name.dev.domain.com/webmail - All mails are forwarded to development@localhost
     * Login via development Password password
 - PHPunit for testing
 - ioncube
@@ -110,6 +110,9 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 
 #### How do i access VM from a different device (e.g. mobile testing)?
 - You need to enable network bridge in Configuration.yaml and a working DHCP server in your local network. Don't forget hosts entries.
+
+#### Hostupdater or vgbuest has an issue
+- Update your vagrant plugins ```vagrant plugin update```
 
 ### Warning
 - Puppet MySQL module is patched to use MariaDB in Debian.

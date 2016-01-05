@@ -117,8 +117,14 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 
 ## Install required software
 ### Archlinux
-```pacman -S apache-ant php php-gd vagrant virtualbox```
-- Enable gd.so afterwards - reqruied by shopware composer
+> pacman -S apache-ant php php-gd vagrant virtualbox
+
+Enable gd.so afterwards - reqruied by shopware composer.
+
+### Debian
+> apt-get install virtualbox vagrant ant php5-cli php5-gd php5-curl
+
+Best to load a virtualbox v5+ and vagrant v1.8+
 
 ### Powered by
 - Crafted with love by [Onedrop](https://1drop.de/)

@@ -14,7 +14,7 @@ if [ ! -f ./www/shopware.php ]; then
     mkdir -p ./www/html
   else
     rm -rf ./www
-    git clone --single-branch --branch 5.1 git@github.com:shopware/shopware.git ./www
+    git clone --single-branch --branch 5.1 https://github.com/shopware/shopware.git ./www
     cd www
     git checkout v5.1.1
     touch FIRST_RUN

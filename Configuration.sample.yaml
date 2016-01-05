@@ -10,6 +10,8 @@ VirtualMachine:
   gui: false
   # Fully qualified domain name e.g. project.name.dev.domain.com
   domain: project.name.dev.domain.com
+  # Alias domains separated by space
+  aliases:
   #Apt proxy setting for a local mirror or  e.g. http://10.50.101.2:3142
   aptProxy:
   # To get a IP in your local network to make the VM accessbiable from other devices you need a network bridge

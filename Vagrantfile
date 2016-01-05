@@ -16,7 +16,7 @@ begin
 end
 
 # Check for missing plugins
-required_plugins = %w(vagrant-hostsupdater vagrant-vbguest)
+required_plugins = %w(vagrant-hostmanager vagrant-vbguest)
 plugin_installed = false
 required_plugins.each do |plugin|
 	unless Vagrant.has_plugin?(plugin)
@@ -34,7 +34,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.box = 'debian/jessie64'
 
 	config.vm.hostname = configuration['VirtualMachine']['domain'] ||= 'dev.fluidtypo3.org'
-	config.hostsupdater.remove_on_suspend = true
+	config.hostmanager.enabled = false
+	config.hostmanager.manage_host = true
+	if configuration['VirtualMachine']['aliases'] ||= ''
+		config.hostmanager.aliases = configuration['VirtualMachine']['aliases']
+	end
 
 
 	# Activate if your box need to be available in local network
@@ -52,6 +56,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.synced_folder configuration['Mount']['from'] ||= 'www', '/var/www',
 		id: 'shopware', type: 'nfs', mount_options: ['rw', 'vers=3', 'udp', 'noatime', 'actimeo=1']
 
+	config.vm.provision :hostmanager, :run => 'always'
 
 	config.vm.provider 'virtualbox' do |vb|
 		vb.gui = configuration['VirtualMachine']['gui'] ||= false

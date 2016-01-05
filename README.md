@@ -111,7 +111,7 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 #### How do i access VM from a different device (e.g. mobile testing)?
 - You need to enable network bridge in Configuration.yaml and a working DHCP server in your local network. Don't forget hosts entries.
 
-#### Hostupdater or vgbuest has an issue
+#### Hostmanager or vgbuest has an issue
 - Update your vagrant plugins ```vagrant plugin update```
 
 ### Warning

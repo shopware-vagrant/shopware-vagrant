@@ -124,6 +124,7 @@ class php5 {
 		command => '/usr/sbin/php5enmod xdebug',
 		require => [Exec['installPhpXdebug'], Php::Augeas['xdebug-zend_extension']],
 		notify  => Service['php5-fpm'],
+		unless => '/usr/bin/php -i | /bin/grep -q "with Xdebug"'
 	}
 
 	exec { 'installPhpUnit':

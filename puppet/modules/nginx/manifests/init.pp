@@ -4,13 +4,14 @@ class nginx {
 		ensure => purged,
 	}
 
-	exec { 'killapache':
+	exec { 'nginxDir':
 		command => '/bin/mkdir -p /etc/nginx/includes',
+		unless  => '/usr/bin/test -e /etc/nginx/includes/',
 	}
 
 	package { [ 'nginx', 'nginx-full', 'nginx-common']:
 		ensure  => latest,
-		require => Exec['killapache'],
+		require => Exec['nginxDir'],
 	}
 
 	file { '/etc/nginx/includes/shopware.conf':

@@ -7,12 +7,14 @@ class shopware {
 	exec { 'install-grunt':
 		command => '/bin/ln -sf /usr/bin/nodejs /usr/bin/node && /usr/bin/npm install -g grunt-cli',
 		require => [Package['npm']],
+		unless => '/usr/bin/test -f /usr/local/bin/grunt'
 	}
 
 	exec { 'install-grunt-local':
 		cwd => '/var/www/themes',
 		command => '/bin/mkdir -p /home/vagrant/node_modules && /bin/ln -sf /home/vagrant/node_modules /var/www/themes/node_modules && /usr/bin/npm install',
-		require => [Exec['install-grunt']]
+		require => [Exec['install-grunt']],
+		unless => '/usr/bin/test -e /home/vagrant/node_modules/grunt/'
 	}
 
 	mysql::db { 'shopware':
@@ -54,9 +56,9 @@ class shopware {
 
 	exec { 'installDB':
 		cwd     => '/var/www/',
-		command => '/usr/bin/mysql -u shopware -ppassword shopware < _sql/install/latest.sql && ./build/ApplyDeltas.php --username="shopware" --password="password" --host="localhost" --dbname="shopware" --mode=install && ./bin/console sw:snippets:to:db && rm -f /var/www/FIRST_RUN',
+		command => '/usr/bin/mysql -u shopware -ppassword shopware < _sql/install/latest.sql && ./build/ApplyDeltas.php --username="shopware" --password="password" --host="localhost" --dbname="shopware" --mode=install && ./bin/console sw:generate:attributes && ./bin/console sw:snippets:to:db --include-plugins && rm /var/www/recovery/install/data/dbsetup.lock',
 		require => [Exec['installIonCube'], Mysql_user["shopware@%"], Mysql_grant["shopware@%/shopware.*"]],
-		onlyif  => '/usr/bin/test -e /var/www/FIRST_RUN ',
+		onlyif => '/usr/bin/test -e /var/www/recovery/install/data/dbsetup.lock',
 	}
 
 	exec{ 'installIonCube':
@@ -80,6 +82,7 @@ class shopware {
 		command => '/usr/sbin/php5enmod ioncube',
 		require => [ File['/etc/php5/mods-available/ioncube.ini']],
 		notify  => Service['php5-fpm'],
+		unless => '/usr/bin/php -i | /bin/grep -q "ionCube Loader"'
 	}
 
 	file { [

@@ -34,7 +34,7 @@ if [ ! -f ./www/shopware.php ]; then
     ${COMPOSER} install --no-interaction --optimize-autoloader
     cd ./recovery/common
     ${COMPOSER} install --no-interaction --optimize-autoloader
-    touch FIRST_RUN
+    touch ${WEB_PATH}/www/recovery/install/data/dbsetup.lock
     rm -f ${WEB_PATH}/www/composer.phar
   fi
 fi

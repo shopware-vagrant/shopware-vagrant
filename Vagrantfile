@@ -30,13 +30,26 @@ if plugin_installed === true
 	exec "vagrant #{ARGV.join' '}"
 end
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-	config.vm.box = 'debian/jessie64'
+unless system("
+		if [ #{ARGV[0]} = 'up' -o #{ARGV[0]} = 'reload' ]; then
+			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)}
+		fi
+	")
+	fail Vagrant::Errors::VagrantError.new, "Please take a look at README.md for more informations and try again"
+end
 
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+	if Vagrant::Util::Platform.windows?
+		fail Vagrant::Errors::VagrantError.new, "No windows support!"
+	end
+
+	config.vm.box = 'debian/jessie64'
 	config.vm.hostname = configuration['VirtualMachine']['domain'] ||= 'dev.fluidtypo3.org'
-	config.hostmanager.enabled = false
+	config.hostmanager.enabled = true
 	config.hostmanager.manage_host = true
-	if configuration['VirtualMachine']['aliases'] ||= ''
+	config.hostmanager.ignore_private_ip = false
+	config.hostmanager.include_offline = true
+	if configuration['VirtualMachine']['aliases'] ||= false
 		config.hostmanager.aliases = configuration['VirtualMachine']['aliases']
 	end
 
@@ -66,12 +79,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		vb.customize ['modifyvm', :id, '--cpus', configuration['VirtualMachine']['cpus'] ||= '2']
 		vb.customize ['modifyvm', :id, '--ioapic', 'on']
 	end
-
-	system("
-		if [ #{ARGV[0]} = 'up' -o #{ARGV[0]} = 'reload' ]; then
-			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)}
-		fi
-	")
 
 	config.vm.provision 'fix-no-tty', type: 'shell' do |s|
 		s.privileged = false

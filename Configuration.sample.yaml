@@ -1,7 +1,7 @@
 ---
 VirtualMachine:
   #Internal IP e.g. "172.23.42.42"
-  ip: "172.23.42.42"
+  ip: 172.23.42.42
   # CPU cores
   cpus: 2
   # MB RAM

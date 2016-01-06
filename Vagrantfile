@@ -1,6 +1,7 @@
 VAGRANTFILE_API_VERSION = '2'
 Vagrant.require_version '>= 1.8'
 
+require 'readline'
 require 'yaml'
 
 configuration = YAML.load(File.open(File.join(File.dirname(__FILE__), 'Configuration.sample.yaml'), File::RDONLY).read)
@@ -20,8 +21,13 @@ required_plugins = %w(vagrant-hostmanager vagrant-vbguest)
 plugin_installed = false
 required_plugins.each do |plugin|
 	unless Vagrant.has_plugin?(plugin)
-		system "vagrant plugin install #{plugin}"
-		plugin_installed = true
+	 buf = Readline.readline("Install required vagrant plugin #{plugin} [yes]: ", true)
+	 if buf == 'yes' || buf == ''
+			system "vagrant plugin install #{plugin}"
+			plugin_installed = true
+   else
+		 fail Vagrant::Errors::VagrantError.new, "You need vagrant plugin #{plugin}"
+	 end
 	end
 end
 

@@ -5,7 +5,7 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 
 ### Requirements
 - Linux, Mac
-- New setup requires Apache Ant (php-{gd,curl} for composer)
+- New setup requires php-{gd,curl} for composer
 - For installation Internet connection with enough broadband
 - We only test with Virtualbox
 - Running local nfs-server
@@ -16,7 +16,7 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
     1. Change private vagrant box ip (change second last block), example 172.23.25.23
     2. Change vagrant box domain
 3. ```vagrant up```
-4. Select a repository or setup a new instance (apache ant locally required)
+4. Select a repository or setup a new instance
 5. Enter your administrator password for nfs mount or hosts update
 6. Call URL project.name.dev.domain.com/ to start shopware installation
     1. ```Skip database creation``` in install routine
@@ -43,7 +43,7 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 - sudo su for root
 
 ### Features
-- Hostupdater uses domain form Configuration.yaml
+- Hostmanager uses domain form Configuration.yaml
 - VB-Guest installer
 - Nginx 1.8.x with php-fpm
 - MariaDB 10.1
@@ -87,8 +87,8 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 #### Why are encrypted disks not supported?
 - NFS does not support encrypted host storage as mount.
 
-#### Why do i need local Apache ant?
-- Composer cache can be used (including token handling form github) and we need no Java with Apache Ant in every VM
+#### Why do i need local php?
+- Composer cache can be used (including token handling form github)
 
 #### Why is there a copy of Configuration.sample.yaml?
 - Configuration.yaml is excluded from git.
@@ -103,7 +103,7 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 - Git ships no complete dump. Deltas needs to de applied.
 
 #### Is Windows supported as host?
-- No! A lot stuff could go wrong ant, nfs, bash script.
+- No! A lot stuff could go wrong including bash script, nfs.
 
 #### How to debug vagrant and puppet?
 - Enable puppetDebug in Configuration.yaml and vagrant supports argument --debug (a lot of output).
@@ -120,12 +120,12 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 
 ## Install required software
 ### Archlinux
-> pacman -S apache-ant php php-gd vagrant virtualbox
+> pacman -S php php-gd vagrant virtualbox
 
 Enable gd.so afterwards - reqruied by shopware composer.
 
 ### Debian
-> apt-get install virtualbox vagrant ant php5-cli php5-gd php5-curl
+> apt-get install virtualbox vagrant php5-cli php5-gd php5-curl
 
 Best to load a virtualbox v5+ and vagrant v1.8+
 

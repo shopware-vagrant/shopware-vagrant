@@ -72,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	#Disable default mount
 	config.vm.synced_folder '.', '/vagrant', :disabled => true
-	config.vm.synced_folder 'utils', '/vagrant'
+	config.vm.synced_folder 'utils', '/vagrant', type: 'nfs'
 
 	config.vm.synced_folder configuration['Mount']['from'] ||= 'www', '/var/www',
 		id: 'shopware', type: 'nfs', mount_options: ['rw', 'vers=3', 'udp', 'noatime', 'actimeo=1']
@@ -114,5 +114,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				:ip_address => configuration['VirtualMachine']['ip'] ||= '172.23.42.42'
 		}
 	end
-	config.vm.provision 'shell', path: 'utils/afterStart.sh', args: '/var/www',  :privileged => false, :run => 'always'
+	config.vm.provision 'after-start', type: 'shell', path: 'utils/afterStart.sh', args: '/var/www',  :privileged => false, :run => 'always'
+
 end

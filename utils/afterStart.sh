@@ -19,11 +19,10 @@ echo -e '================================='
 if [ -f ${WEB_PATH}/bin/console ]; then
   chmod +x ${WEB_PATH}/bin/console
   if ! ${WEB_PATH}/bin/console | grep -q SQLSTATE; then
-    echo -e 'Generate grunt config ...'
+    echo -e 'Grunt starts in background (restarts at theme updates)'
     cd ${WEB_PATH}
     ./bin/console sw:generate:attributes
-    ./bin/console sw:theme:dump:configuration
-    echo -e 'Start grunt with your shop ID: cd themes; grunt --shopId 1'
+    /vagrant/gruntWatcher.sh
   else
     echo -e "No database found. A database is needed to run grunt"
   fi

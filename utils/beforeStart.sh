@@ -1,10 +1,11 @@
 #!/bin/bash
 WEB_PATH=$1
+SHOPWARE_VERSION=$2
 cd ${WEB_PATH}
 if [ ! -f ./www/shopware.php ]; then
   echo -e "You need a shopware instace in your www folder"
   echo -e "Provide your repository e.g. git@gitlab.com:company/your-shopware5.git \e[1mOR\e[0m"
-  echo -e "leave it empty to get current 5.1.x Shopware from github (requires local apache ant)."
+  echo -e "leave it empty to get defined Shopware version (Configuration.yaml) from github (requires local apache ant)."
   echo -e "Project will be cloned into www."
   echo -e "This step deletes content from www. (Crtl-c to stop)"
   read -e -p "Enter url: " REPOSITORY
@@ -22,7 +23,7 @@ if [ ! -f ./www/shopware.php ]; then
       exit 1
     fi
     rm -rf ./www
-    git clone --single-branch --branch v5.1.1 --depth 1 https://github.com/shopware/shopware.git ./www
+    git clone --single-branch --branch ${SHOPWARE_VERSION} --depth 1 https://github.com/shopware/shopware.git ./www
     cd www
     touch FIRST_RUN
     mkdir -p ./html

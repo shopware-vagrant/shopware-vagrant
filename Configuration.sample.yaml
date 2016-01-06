@@ -14,7 +14,7 @@ VirtualMachine:
   aliases:
   #Apt proxy setting for a local mirror or  e.g. http://10.50.101.2:3142
   aptProxy:
-  # To get a IP in your local network to make the VM accessbiable from other devices you need a network bridge
+  # To get a IP in your local network to make the VM accessible from other devices you need a network bridge
   networkBridge: false
   # Puppet debug and verbose for more information
   puppetDebug: false
@@ -22,3 +22,8 @@ VirtualMachine:
 Mount:
   # Local folder
   from: www
+
+Shopware:
+  # Select wanted tag or branch. e.g. tag v5.1.1 or branch 5.1 https://github.com/shopware/shopware
+  # Please notice new features from newer or old breaches like 5.0 or 5.2 could fail the provisioning
+  version: v5.1.1

@@ -30,9 +30,11 @@ if plugin_installed === true
 	exec "vagrant #{ARGV.join' '}"
 end
 
+shopwareVersion = configuration['Shopware']['version'] ||= '5.1'
+
 unless system("
 		if [ #{ARGV[0]} = 'up' -o #{ARGV[0]} = 'reload' ]; then
-			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)}
+			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)} #{shopwareVersion}
 		fi
 	")
 	fail Vagrant::Errors::VagrantError.new, "Please take a look at README.md for more informations and try again"

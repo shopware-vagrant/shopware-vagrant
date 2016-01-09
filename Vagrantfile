@@ -86,6 +86,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		vb.customize ['modifyvm', :id, '--memory', configuration['VirtualMachine']['memory'] ||= '2048']
 		vb.customize ['modifyvm', :id, '--cpus', configuration['VirtualMachine']['cpus'] ||= '2']
 		vb.customize ['modifyvm', :id, '--ioapic', 'on']
+
+		vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+		vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
 	end
 
 	config.vm.provision 'fix-no-tty', type: 'shell' do |s|

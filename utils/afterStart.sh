@@ -11,9 +11,10 @@ done
 
 # Return IP(s) from the VM
 echo -e '================================='
-ip addr | grep 'state UP' -A2 | grep 'inet ' | tail -n +2 | awk '{print "IP:\t"$2}'
-echo -e "Frontend:\thttp://`hostname -f`"
-echo -e "Backend:\thttp://`hostname -f`/backend"
+ip addr | grep 'state UP' -A2 | grep 'inet ' | tail -n +2 | awk '{print "IP:\t\t"$2}'
+echo -e "Frontend:\t\thttp://`hostname -f`"
+echo -e "Backend:\t\thttp://`hostname -f`/backend"
+echo -e "Browsersync:\thttp://`hostname -f`:3001"
 echo -e '================================='
 
 if [ -f ${WEB_PATH}/bin/console ]; then

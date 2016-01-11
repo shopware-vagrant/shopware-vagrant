@@ -36,7 +36,7 @@ if [ ! -f ./www/shopware.php ]; then
     ${COMPOSER} install --no-interaction --optimize-autoloader
     VERSION=`git describe --abbrev=0 --tags`
     REVISION=`date -d @$(git log -n1 --format="%at") +%Y%m%d%H%M`
-    sed -i "s/___VERSION___/${VERSION//v}/g;s/___VERSION_TEXT___//g;s/___REVISION___/${REVISION}/g" ${WEB_PATH}/www/engine/Shopware/Application.php ${WEB_PATH}/www/recovery/install/data/version
+    sed -i '' "s/___VERSION___/${VERSION//v}/g;s/___VERSION_TEXT___//g;s/___REVISION___/${REVISION}/g" ${WEB_PATH}/www/engine/Shopware/Application.php ${WEB_PATH}/www/recovery/install/data/version
     touch ${WEB_PATH}/www/recovery/install/data/dbsetup.lock
     rm -f ${WEB_PATH}/www/composer.phar
   fi

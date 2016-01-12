@@ -26,4 +26,4 @@ Mount:
 Shopware:
   # Select wanted tag or branch. e.g. tag v5.1.1 or branch 5.1 https://github.com/shopware/shopware
   # Please notice new features from newer or old breaches like 5.0 or 5.2 could fail the provisioning
-  version: v5.1.1
+  version: v5.1.2

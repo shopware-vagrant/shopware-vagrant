@@ -37,10 +37,11 @@ if plugin_installed === true
 end
 
 shopwareVersion = configuration['Shopware']['version'] ||= '5.1'
+patchBrowsersync = configuration['Shopware']['patchBrowsersync']
 
 unless system("
 		if [ #{ARGV[0]} = 'up' -o #{ARGV[0]} = 'reload' ]; then
-			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)} #{shopwareVersion}
+			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)} #{shopwareVersion} #{patchBrowsersync}
 		fi
 	")
 	fail Vagrant::Errors::VagrantError.new, "Please take a look at README.md for more informations and try again"
@@ -111,12 +112,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				:apt_proxy => configuration['VirtualMachine']['aptProxy'] ||= '',
 				:document_root => '/var/www',
 				:fqdn => configuration['VirtualMachine']['domain'] ||= 'project.dev.domain.com',
+				:browsersync => patchBrowsersync,
 				:operatingsystem => 'Debian',
 				:osfamily => 'Debian',
 				:osversion => 'jessie',
 				:ip_address => configuration['VirtualMachine']['ip'] ||= '172.23.42.42'
 		}
 	end
-	config.vm.provision 'after-start', type: 'shell', path: 'utils/afterStart.sh', args: '/var/www',  :privileged => false, :run => 'always'
+	config.vm.provision 'after-start', type: 'shell', path: 'utils/afterStart.sh', args: ['/var/www', "#{patchBrowsersync}"],  :privileged => false, :run => 'always'
 
 end

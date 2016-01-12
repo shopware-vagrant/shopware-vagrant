@@ -1,5 +1,6 @@
 #!/bin/bash
 WEB_PATH=$1
+PATCH_BROWSERSYNC=$2
 # Load tmpfs mount AFTER nfs
 mounts=( "/var/cache" "/web/cache" )
 for mount in "${mounts[@]}"
@@ -14,7 +15,9 @@ echo -e '================================='
 ip addr | grep 'state UP' -A2 | grep 'inet ' | tail -n +2 | awk '{print "IP:\t\t"$2}'
 echo -e "Frontend:\t\thttp://`hostname -f`"
 echo -e "Backend:\t\thttp://`hostname -f`/backend"
-echo -e "Browsersync:\thttp://`hostname -f`:3001"
+if [ ${PATCH_BROWSERSYNC} == "true" ]; then
+  echo -e "Browsersync:\thttp://`hostname -f`:3001"
+fi
 echo -e '================================='
 
 if [ -f ${WEB_PATH}/bin/console ]; then

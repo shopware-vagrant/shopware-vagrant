@@ -1,6 +1,7 @@
 #!/bin/bash
 WEB_PATH=$1
 SHOPWARE_VERSION=$2
+PATCH_BROWSERSYNC=$3
 cd ${WEB_PATH}
 if [ ! -f ./www/shopware.php ]; then
   echo -e "You need a shopware instace in your www folder"
@@ -35,7 +36,9 @@ if [ ! -f ./www/shopware.php ]; then
     cd ./recovery/common
     ${COMPOSER} install --no-interaction --optimize-autoloader
     cd ${WEB_PATH}/www
-    patch -p1 < ../utils/browersync.patch
+    if [ ${PATCH_BROWSERSYNC} == "true" ]; then
+      patch -p1 < ../utils/browersync.patch
+    fi
     VERSION=`git describe --abbrev=0 --tags`
     REVISION=`date -d @$(git log -n1 --format="%at") +%Y%m%d%H%M`
     sed -i.bak "s/___VERSION___/${VERSION//v}/g;s/___VERSION_TEXT___//g;s/___REVISION___/${REVISION}/g" ${WEB_PATH}/www/engine/Shopware/Application.php ${WEB_PATH}/www/recovery/install/data/version

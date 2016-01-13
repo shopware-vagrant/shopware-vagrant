@@ -113,6 +113,10 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 #### Hostmanager or vgbuest has an issue
 - Update your vagrant plugins ```vagrant plugin update```
 
+#### Puppet provision fails with ```Could not set 'directory' on ensure: No such file or directory @ dir_s_mkdir```
+- Nfs has a problem. Most times it is enough to stop nfs and ```vagrant reload```.
+
+
 ### Warning
 - Puppet MySQL module is patched to use MariaDB in Debian.
 
@@ -126,7 +130,7 @@ Enable gd.so afterwards - reqruied by shopware composer.
 ### Debian
 > apt-get install virtualbox vagrant php5-cli php5-gd php5-curl
 
-Best to load a virtualbox v5+ and vagrant v1.8+
+Recommended is virtualbox v5+ and required vagrant v1.8+
 
 ### Powered by
 - Crafted with love by [Onedrop](https://1drop.de/)

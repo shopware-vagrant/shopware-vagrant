@@ -36,6 +36,7 @@ if [ ! -f ./www/shopware.php ]; then
     cd ./recovery/common
     ${COMPOSER} install --no-interaction --optimize-autoloader
     cd ${WEB_PATH}/www
+    patch -p1 < ../utils/install.patch
     if [ ${PATCH_BROWSERSYNC} == "true" ]; then
       patch -p1 < ../utils/browersync.patch
     fi

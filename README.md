@@ -18,8 +18,7 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 3. ```vagrant up```
 4. Select a repository or setup a new instance
 5. Enter your administrator password for nfs mount or hosts update
-6. Call URL project.name.dev.domain.com/ to start shopware installation
-    1. ```Skip database creation``` in install routine
+6. Call URL project.name.dev.domain.com/ to start shopware installation (unnecessary steps removed)
 8. (Optional) After setup to use grunt assign or save setting in a theme or ```vagrant reload```
 
 ### Credentials

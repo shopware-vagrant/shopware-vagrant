@@ -1,0 +1,38 @@
+diff --git a/recovery/install/config/production.php b/recovery/install/config/production.php
+--- a/recovery/install/config/production.php
++++ b/recovery/install/config/production.php
+@@ -1,4 +1,21 @@
+ <?php
++if (!isset($_SESSION)) {
++    session_cache_limiter(false);
++    session_set_cookie_params(600);
++    session_start();
++    $rootDir = dirname(__DIR__ . '/../../../../');
++    $config = include dirname(__DIR__ . '/../../../..') . '/config.php';
++    $_SESSION = [
++            'parameters' => [
++                'c_database_host' => isset($config['db']['host']) ? $config['db']['host'] : '',
++                'c_database_port' => isset($config['db']['port']) ? $config['db']['port'] : '',
++                'c_database_socket' => isset($config['db']['socket']) ? $config['db']['socket'] : '',
++                'c_database_user' => isset($config['db']['username']) ? $config['db']['username'] : '',
++                'c_database_password' => isset($config['db']['password']) ? $config['db']['password'] : '',
++                'c_database_schema' => isset($config['db']['dbname']) ? $config['db']['dbname'] : '',
++            ]
++        ] + $_SESSION;
++}
+ return [
+     'shopware.root_dir' => realpath(__DIR__ . '/../../../'),
+     'check.ping_url' => 'recovery/install/ping.php',
+@@ -15,10 +32,10 @@ return [
+     'menu.helper' => [
+         'routes' => [
+             'language-selection',
+-            'requirements',
++//            'requirements',
+             'license',
+             'database-configuration',
+-            'database-import',
++//            'database-import',
+             'edition',
+             'configuration',
+             'finish',

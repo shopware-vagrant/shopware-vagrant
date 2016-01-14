@@ -41,7 +41,7 @@ if [ ! -f ./www/shopware.php ]; then
       patch -p1 < ../utils/browersync.patch
     fi
     VERSION=`git describe --abbrev=0 --tags`
-    REVISION=`date -d @$(git log -n1 --format="%at") +%Y%m%d%H%M`
+    REVISION=`php -r 'echo date("YmdHm",$argv[1]);' $(git log -n1 --format="%at")`
     sed -i.bak "s/___VERSION___/${VERSION//v}/g;s/___VERSION_TEXT___//g;s/___REVISION___/${REVISION}/g" ${WEB_PATH}/www/engine/Shopware/Application.php ${WEB_PATH}/www/recovery/install/data/version
     touch recovery/install/data/dbsetup.lock
     rm -f composer.phar ${WEB_PATH}/www/engine/Shopware/Application.php.bak ${WEB_PATH}/www/recovery/install/data/version.bak

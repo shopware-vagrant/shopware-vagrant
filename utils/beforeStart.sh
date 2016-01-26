@@ -31,6 +31,12 @@ if [ ! -f ./www/shopware.php ]; then
       php -r "readfile('https://getcomposer.org/installer');" | php
       COMPOSER=${WEB_PATH}/www/composer.phar
     fi
+    if ! ${COMPOSER} config --global github-oauth.github.com >/dev/null 2>&1 ; then
+      echo -e "Token is needed to avoid 50 request per hour limit. (Limit with token by 1000)"
+      echo -e "Token can be generated on GitHub: https://github.com/settings/tokens/new?scopes=repo&description=Composer+on+`hostname`"
+      read -e -s -p "Github token (hidden): " TOKEN
+      ${COMPOSER} config --global github-oauth.github.com ${TOKEN}
+    fi
     mkdir -p ./html
     ${COMPOSER} install --no-interaction --optimize-autoloader
     cd ./recovery/common

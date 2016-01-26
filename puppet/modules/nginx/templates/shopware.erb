@@ -116,7 +116,7 @@ location = /sitemap.xml {
 
 location ~ \.php$ {
 <% if @browsersync == 'true' %>
-    sub_filter '<script src="/web/cache/' '<script type=\'text/javascript\' id="__bs_script__"> document.write("<script async src=\'http://HOST:3000/browser-sync/browser-sync-client.2.11.0.js\'><\/script>".replace("HOST", location.hostname));</script><script src="/web/cache/';
+    sub_filter '<script src="/web/cache/' '<script type=\'text/javascript\' id="__bs_script__"> document.write("<script async src=\'http://HOST:3000/browser-sync/browser-sync-client.js\'><\/script>".replace("HOST", location.hostname));</script><script src="/web/cache/';
 <% end %>
     ## NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
     fastcgi_split_path_info ^(.+\.php)(/.+)$;

@@ -18,6 +18,8 @@ VirtualMachine:
   networkBridge: false
   # Puppet debug and verbose for more information
   puppetDebug: false
+  # Virtualbox group (works only without open Virtualbox manager)
+  group: /vagrant/shopware
 
 Mount:
   # Local folder

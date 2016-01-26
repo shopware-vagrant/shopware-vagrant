@@ -15,7 +15,7 @@ echo -e '================================='
 ip addr | grep 'state UP' -A2 | grep 'inet ' | tail -n +2 | awk '{print "IP:\t\t"$2}'
 echo -e "Frontend:\t\thttp://`hostname -f`"
 echo -e "Backend:\t\thttp://`hostname -f`/backend"
-if [ ${PATCH_BROWSERSYNC} == "true" ]; then
+if [ "${PATCH_BROWSERSYNC}" == "true" ]; then
   echo -e "Browsersync:\thttp://`hostname -f`:3001"
 fi
 echo -e '================================='

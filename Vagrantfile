@@ -5,10 +5,10 @@ require 'readline'
 require 'yaml'
 
 configuration = YAML.load(File.open(File.join(File.dirname(__FILE__), 'Configuration.sample.yaml'), File::RDONLY).read)
-if File.file?File.join(File.dirname(__FILE__),'Configuration.yaml')
+if File.file? File.join(File.dirname(__FILE__), 'Configuration.yaml')
 else
 	require 'fileutils'
-	FileUtils.cp(File.join(File.dirname(__FILE__),'Configuration.sample.yaml'),File.join(File.dirname(__FILE__),'Configuration.yaml'))
+	FileUtils.cp(File.join(File.dirname(__FILE__), 'Configuration.sample.yaml'), File.join(File.dirname(__FILE__), 'Configuration.yaml'))
 	puts('Configuration.yaml was missing. The Configuration.sample.yaml got copied')
 end
 
@@ -21,27 +21,27 @@ required_plugins = %w(vagrant-hostmanager vagrant-vbguest)
 plugin_installed = false
 required_plugins.each do |plugin|
 	unless Vagrant.has_plugin?(plugin)
-	 buf = Readline.readline("Install required vagrant plugin #{plugin} [yes]: ", true)
-	 if buf == 'yes' || buf == ''
+		buf = Readline.readline("Install required vagrant plugin #{plugin} [yes]: ", true)
+		if buf == 'yes' || buf == ''
 			system "vagrant plugin install #{plugin}"
 			plugin_installed = true
-   else
-		 fail Vagrant::Errors::VagrantError.new, "You need vagrant plugin #{plugin}"
-	 end
+		else
+			fail Vagrant::Errors::VagrantError.new, "You need vagrant plugin #{plugin}"
+		end
 	end
 end
 
 # If new plugins installed, restart Vagrant process
 if plugin_installed === true
-	exec "vagrant #{ARGV.join' '}"
+	exec "vagrant #{ARGV.join ' '}"
 end
 
-shopwareVersion = configuration['Shopware']['version'] ||= '5.1'
-patchBrowsersync = configuration['Shopware']['patchBrowsersync']
+shopware_version = configuration['Shopware']['version'] ||= '5.1'
+patch_browsersync = configuration['Shopware']['patchBrowsersync']
 
 unless system("
 		if [ #{ARGV[0]} = 'up' -o #{ARGV[0]} = 'reload' ]; then
-			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)} #{shopwareVersion} #{patchBrowsersync}
+			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)} #{shopware_version} #{patch_browsersync}
 		fi
 	")
 	fail Vagrant::Errors::VagrantError.new, "Please take a look at README.md for more informations and try again"
@@ -76,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.synced_folder 'utils', '/vagrant', type: 'nfs'
 
 	config.vm.synced_folder configuration['Mount']['from'] ||= 'www', '/var/www',
-		id: 'shopware', type: 'nfs', mount_options: ['rw', 'vers=3', 'udp', 'noatime', 'actimeo=1']
+													id: 'shopware', type: 'nfs', mount_options: ['rw', 'vers=3', 'udp', 'noatime', 'actimeo=1']
 
 	config.vm.provision :hostmanager, :run => 'always'
 
@@ -96,14 +96,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.provision 'fix-no-tty', type: 'shell' do |s|
 		s.privileged = false
 		s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
-  end
+	end
 
 	config.vm.provision 'install-puppet', type: 'shell', inline: 'apt-get install --yes puppet &> /dev/null'
 
 	config.vm.provision :puppet do |puppet|
 		puppet.synced_folder_type = 'nfs'
 		puppet.manifests_path = 'puppet/manifests'
-		puppet.module_path    = 'puppet/modules'
+		puppet.module_path = 'puppet/modules'
 		if configuration['VirtualMachine']['puppetDebug'] ||= false
 			puppet.options = '--debug --verbose --hiera_config /vagrant/hiera.yaml'
 		else
@@ -113,13 +113,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				:apt_proxy => configuration['VirtualMachine']['aptProxy'] ||= '',
 				:document_root => '/var/www',
 				:fqdn => configuration['VirtualMachine']['domain'] ||= 'project.dev.domain.com',
-				:browsersync => patchBrowsersync,
+				:browsersync => patch_browsersync,
 				:operatingsystem => 'Debian',
 				:osfamily => 'Debian',
 				:osversion => 'jessie',
 				:ip_address => configuration['VirtualMachine']['ip'] ||= '172.23.42.42'
 		}
 	end
-	config.vm.provision 'after-start', type: 'shell', path: 'utils/afterStart.sh', args: ['/var/www', "#{patchBrowsersync}"],  :privileged => false, :run => 'always'
+	config.vm.provision 'after-start', type: 'shell', path: 'utils/afterStart.sh', args: ['/var/www', "#{patch_browsersync}"], :privileged => false, :run => 'always'
 
 end

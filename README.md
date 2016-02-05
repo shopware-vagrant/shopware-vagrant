@@ -60,7 +60,6 @@ Create a Debian jessie based Virtualbox VM, installs shopware with a few helper 
 - ioncube
 - Composer
 
-
 ### Xdebug
 Use a Firefox or Chrome extension to active debug or profiler
 
@@ -72,6 +71,10 @@ Activate in PhpStorm/IDEA ```Start Listening for PHP Debug Connections``` and tu
 
 #### Webgrind profiler
 Activate the profiler function of the addon. Instead of a browser-extension ?XDEBUG_PROFILE as GET parameter is also possible.
+
+#### Grunt & Browsersync
+Grunt output is available in a screen session named grunt. Accessible via `vagrant ssh -c 'screen -r grunt'` and can be closed via `Ctrl-A` and `Ctrl-D`
+Port 3001 to get Browser GUI
 
 ### FAQ
 

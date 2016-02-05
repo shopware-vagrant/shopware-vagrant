@@ -26,7 +26,7 @@ if [ -f ${WEB_PATH}/bin/console ]; then
     echo -e 'Grunt starts in background (restarts at theme updates)'
     cd ${WEB_PATH}
     ./bin/console sw:generate:attributes
-    /vagrant/gruntWatcher.sh &
+    screen -d -m -S grunt /vagrant/gruntWatcher.sh
   else
     echo -e "No database found. A database is needed to run grunt"
   fi

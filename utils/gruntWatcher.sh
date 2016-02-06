@@ -12,5 +12,5 @@ function grunt_reload {
 grunt_reload
 sudo tail -n 0 -f /var/log/nginx/access.log | while read LOGLINE
 do
-   [[ "${LOGLINE}" == *"POST /backend/Theme/"* ]] || [[ "${LOGLINE}" == *"POST /backend/theme/"* ]] && grunt_reload
+   [[ "${LOGLINE}" == *"POST /backend/Theme/"* ]] || [[ "${LOGLINE}" == *"POST /backend/theme/"* ]] || [[ "${LOGLINE}" == *"POST /backend/PluginInstaller/"* ]] || [[ "${LOGLINE}" == *"GET /recovery/install/index.php/finish/"* ]] && grunt_reload
 done

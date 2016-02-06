@@ -1,7 +1,27 @@
 diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
 --- a/themes/Gruntfile.js
 +++ b/themes/Gruntfile.js
-@@ -94,6 +94,20 @@ module.exports = function (grunt) {
+@@ -28,6 +28,19 @@
+         variables[key] = config.config[key];
+     }
+
++    var ifaces = require('os').networkInterfaces();
++    var lookupIpAddress = null;
++    for (var dev in ifaces) {
++        if (dev != "eth0" && dev != "eth1") {
++            continue;
++        }
++        ifaces[dev].forEach(function (details) {
++            if (details.family == 'IPv4') {
++                lookupIpAddress = details.address;
++            }
++        });
++    }
++
+     grunt.initConfig({
+         uglify: {
+             production: {
+@@ -95,6 +108,23 @@
                  '../themes/Frontend/**/_public/src/js/*.js',
                  '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
              ]
@@ -9,20 +29,23 @@ diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
 +        browserSync: {
 +            dev: {
 +                bsFiles: {
-+                    src : [
++                    src: [
 +                        '../web/cache/*.css',
 +                        '../web/cache/*.js'
 +                    ]
 +                },
 +                options: {
 +                    watchTask: true,
-+                    reloadOnRestart: true
++                    reloadOnRestart: true,
++                    ws: true,
++                    host: lookupIpAddress,
++                    open: 'ui'
 +                }
 +            }
          }
      });
 
-@@ -101,7 +116,8 @@ module.exports = function (grunt) {
+@@ -102,7 +132,8 @@
      grunt.loadNpmTasks('grunt-contrib-watch');
      grunt.loadNpmTasks('grunt-contrib-uglify');
      grunt.loadNpmTasks('grunt-contrib-jshint');

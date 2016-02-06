@@ -31,6 +31,20 @@ required_plugins.each do |plugin|
 	end
 end
 
+# Remove plugins with issues
+required_plugins = %w(vagrant-hostsupdater)
+required_plugins.each do |plugin|
+	if Vagrant.has_plugin?(plugin)
+		buf = Readline.readline("Remove inactive or outdated vagrant plugin #{plugin} [yes]: ", true)
+		if buf == 'yes' || buf == ''
+			system "vagrant plugin uninstall #{plugin}"
+			plugin_installed = true
+		else
+			puts("Vagrant plugin #{plugin} can cause issues and was removed or replaced")
+		end
+	end
+end
+
 # If new plugins installed, restart Vagrant process
 if plugin_installed === true
 	exec "vagrant #{ARGV.join ' '}"
@@ -61,7 +75,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	if configuration['VirtualMachine']['aliases'] ||= false
 		config.hostmanager.aliases = configuration['VirtualMachine']['aliases']
 	end
-
 
 	# Activate if your box need to be available in local network
 	if configuration['VirtualMachine']['networkBridge'] ||= false

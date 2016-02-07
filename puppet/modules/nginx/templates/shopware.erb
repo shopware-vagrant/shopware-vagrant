@@ -12,12 +12,6 @@ location = /favicon.ico {
     access_log off;
 }
 
-location = /robots.txt {
-    allow all;
-    log_not_found off;
-    access_log off;
-}
-
 location = /templates/_default/backend/_resources/resources/css/icon-set.css {
     gzip off;
 }
@@ -30,91 +24,125 @@ location ~ /\. {
 }
 
 ## Deny all attems to access possible configuration files
-location ~ \.(tpl|yml|ini)$ {
-    deny all;
+location ~ \.(tpl|yml|ini|log)$ {
+	deny all;
 }
 
 ## Deny access to media upload folder
 location ^~ /media/temp/ {
-    deny all;
+	deny all;
 }
 
+# Shopware < 5.1 caches
 location ^~ /cache/ {
-    deny all;
+	deny all;
+}
+
+# Shopware >= 5.1 caches and logs
+location ^~ /var/ {
+	deny all;
 }
 
 location ^~ /files/documents/ {
     deny all;
 }
 
-# Breaks backend/media/ rewrite
-#
-#location ~ /(engine|files|templates|media)/ {
-#    location ~ \.php$ {
-#        return 403;
-#    }
-#}
+## Fallback for old media paths
+location ^~ /media/ {
+	try_files $uri /shopware.php?controller=Media&action=fallback;
+}
 
-location /check/ {
-    index index.php;
-    try_files $uri /check/index.php?$args;
+# Block direct access to ESDs, but allow the follwing download options:
+#  * 'PHP' (slow)
+#  * 'X-Accel' (optimized)
+# Also see http://wiki.shopware.com/ESD_detail_1116.html#Ab_Shopware_4.2.2
+location ^~ /files/552211cce724117c3178e3d22bec532ec/ {
+	internal;
 }
 
 # Shopware >= 4.3 unstall / update
 location /recovery/install {
-    index index.php;
-    try_files $uri /recovery/install/index.php?$args;
+	index index.php;
+	try_files $uri /recovery/install/index.php?$args;
 }
 
 location /recovery/update {
-    index index.php;
-    try_files $uri /recovery/update/index.php?$args;
+	index index.php;
+	try_files $uri /recovery/update/index.php?$args;
 }
 
-# Shopware < 4.3 install / update
-location /install {
-    index index.php;
-    try_files $uri /install/index.php?$args;
-}
-
-location /update {
-    index index.php;
-    try_files $uri /update/index.php?$args;
-}
 
 location / {
-    ## All static files will be served directly.
-    location ~* ^.+\.(?:css|cur|js|jpe?g|gif|ico|png|html|xml)$ {
-        ## Defining rewrite rules
-        rewrite files/documents/.* /engine last;
-        rewrite backend/media/(.*) /media/$1 last;
+	location ~* "^/themes/Frontend/Responsive/frontend/_public/vendors/fonts/open-sans-fontface/(?:.+)\.(?:ttf|eot|svg|woff)$" {
+		expires max;
+		add_header Cache-Control "public";
+		access_log off;
+		log_not_found off;
+	}
 
-        expires 1w;
-        add_header Pragma public;
-        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+	location ~* "^/themes/Frontend/Responsive/frontend/_public/src/fonts/(?:.+)\.(?:ttf|eot|svg|woff)$" {
+		expires max;
+		add_header Cache-Control "public";
+		access_log off;
+		log_not_found off;
+	}
 
-        access_log off;
-        # The directive enables or disables messages in error_log about files not found on disk.
-        log_not_found off;
+	location ~* "^/web/cache/(?:[0-9]{10})_(?:.+)\.(?:js|css)$" {
+		expires max;
+		add_header Cache-Control "public";
+		access_log off;
+		log_not_found off;
+	}
 
-        tcp_nodelay off;
-        ## Set the OS file cache.
-        open_file_cache max=3000 inactive=120s;
-        open_file_cache_valid 45s;
-        open_file_cache_min_uses 2;
-        open_file_cache_errors off;
-    }
 
-    index shopware.php index.php;
-    try_files $uri $uri/ /shopware.php?$args;
+	## All static files will be served directly.
+	location ~* ^.+\.(?:css|cur|js|jpe?g|gif|ico|png|html|xml)$ {
+		## Defining rewrite rules
+		rewrite files/documents/.* /engine last;
+		rewrite backend/media/(.*) /media/$1 last;
+
+		expires 1w;
+		add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+
+		access_log off;
+		# The directive enables or disables messages in error_log about files not found on disk.
+		log_not_found off;
+
+		tcp_nodelay off;
+		## Set the OS file cache.
+		open_file_cache max=3000 inactive=120s;
+		open_file_cache_valid 45s;
+		open_file_cache_min_uses 2;
+		open_file_cache_errors off;
+
+		## Fallback to shopware
+		## comment in if needed
+		#try_files $uri @shopware;
+	}
+
+	index shopware.php index.php;
+	try_files $uri $uri/ /shopware.php?$args;
 }
 
 ## XML Sitemap support.
 location = /sitemap.xml {
-    try_files $uri /shopware.php?controller=SitemapXml;
+	log_not_found off;
+	access_log off;
+	try_files $uri @shopware;
+}
+
+## robots.txt support.
+location = /robots.txt {
+	log_not_found off;
+	access_log off;
+}
+
+location @shopware {
+	rewrite / /shopware.php;
 }
 
 location ~ \.php$ {
+	try_files $uri $uri/ =404;
 <% if @browsersync == 'true' %>
     sub_filter '<script src="/web/cache/' '<script type=\'text/javascript\' id="__bs_script__"> document.write("<script async src=\'http://HOST:3000/browser-sync/browser-sync-client.js\'><\/script>".replace("HOST", location.hostname));</script><script src="/web/cache/';
 <% end %>

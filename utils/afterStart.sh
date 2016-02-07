@@ -23,10 +23,15 @@ echo -e '================================='
 if [ -f ${WEB_PATH}/bin/console ]; then
   chmod +x ${WEB_PATH}/bin/console
   if ! ${WEB_PATH}/bin/console | grep -q SQLSTATE; then
-    echo -e 'Grunt starts in background (restarts at theme updates)'
-    cd ${WEB_PATH}
-    ./bin/console sw:generate:attributes
-    screen -d -m -S grunt /vagrant/gruntWatcher.sh
+    RUNNING_GRUNT_WATCHER=`pgrep -f '^SCREEN.*gruntWatcher.sh$' | wc -l`
+    if [ ${RUNNING_GRUNT_WATCHER} -eq 0 ] ; then
+      echo -e 'Grunt starts as screen in background'
+      cd ${WEB_PATH}
+      ./bin/console sw:generate:attributes
+      screen -d -m -S grunt /vagrant/gruntWatcher.sh
+    else
+      echo -e "Screen gruntWatcher is already running"
+    fi
   else
     echo -e "No database found. A database is needed to run grunt"
   fi

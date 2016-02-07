@@ -1,7 +1,7 @@
 class tools {
 
 	exec { 'phpMyAdmin':
-		command  => '/usr/bin/git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin',
+		command  => '/usr/bin/git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin &',
 		unless   => '/usr/bin/test -f /usr/share/php/phpMyAdmin/index.php',
 		require  => Package['php5-common'],
 	}
@@ -25,7 +25,7 @@ class tools {
 	}
 
 	exec { 'webgrind':
-		command  => '/usr/bin/git clone --single-branch --depth 1 --branch master https://github.com/jokkedk/webgrind.git /usr/share/php/webgrind',
+		command  => '/usr/bin/git clone --single-branch --depth 1 --branch master https://github.com/jokkedk/webgrind.git /usr/share/php/webgrind &',
 		unless   => '/usr/bin/test -f /usr/share/php/webgrind/index.php',
 		require  => Package['php5-common'],
 	}

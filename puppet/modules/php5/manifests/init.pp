@@ -47,7 +47,7 @@ class php5 {
 	php::augeas {
 		'php-memorylimit':
 			entry => 'PHP/memory_limit',
-			value => '256M';
+			value => '512M';
 		'php-upload_max_filesize':
 			entry => 'PHP/upload_max_filesize',
 			value => '256M';
@@ -106,6 +106,14 @@ class php5 {
 			entry  => 'apcu/apc.shm_size',
 			value  => '512M',
 			target => '/etc/php5/mods-available/apcu.ini';
+		'opcache-opcache:max_accelerated_files':
+			entry  => 'opcache/max_accelerated_files',
+			value  => '15000',
+			target => '/etc/php5/mods-available/opcache.ini';
+		'opcache-opcache:memory_consumption':
+			entry  => 'opcache/memory_consumption',
+			value  => '128',
+			target => '/etc/php5/mods-available/opcache.ini';
 	}
 
 	exec { 'installPhpcs':

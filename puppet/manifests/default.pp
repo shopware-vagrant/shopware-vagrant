@@ -1,16 +1,17 @@
 class { '::mysql::server':
 	root_password    => 'password',
 	override_options => {
-		mysqld => { bind-address => '0.0.0.0' }
+		mysqld => {
+			bind-address => '0.0.0.0',
+			innodb_buffer_pool_instances => '1',
+			query_cache_size => '128M',
+			query_cache_limit => '4M',
+			join_buffer_size => '2M'
+		}
 	},
 	restart          => true,
 }
 
-$override_options = {
-	'mysqld' => {
-		'bind-address' => '',
-	}
-}
 
 include apt
 include defaultpackage

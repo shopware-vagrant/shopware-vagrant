@@ -29,6 +29,9 @@ if [ -f ${WEB_PATH}/bin/console ]; then
       cd ${WEB_PATH}
       ./bin/console sw:generate:attributes
       screen -d -m -S grunt /vagrant/gruntWatcher.sh
+      CACHEFOLDER=`ls var/cache | cat | grep production`
+      mkdir -p var/cache/${CACHEFOLDER/production/development}
+      cp -R var/cache/${CACHEFOLDER}/* var/cache/${CACHEFOLDER/production/development}/
     else
       echo -e "Screen gruntWatcher is already running"
     fi

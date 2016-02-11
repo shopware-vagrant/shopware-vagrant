@@ -76,6 +76,9 @@ Activate the profiler function of the addon. Instead of a browser-extension ?XDE
 Grunt output is available in a screen session named grunt. Accessible via `vagrant ssh -c 'screen -r grunt'` and can be closed via `Ctrl-A` and `Ctrl-D`
 Port 3001 to get Browser GUI
 
+### Shopware console proxy
+Use Shopware console via `./utils/console` proxy and pass all arguments you want. Without an argument the help appears.
+
 ### FAQ
 
 #### How long takes a new instance?

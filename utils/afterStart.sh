@@ -25,13 +25,17 @@ if [ -f ${WEB_PATH}/bin/console ]; then
   if ! ${WEB_PATH}/bin/console | grep -q SQLSTATE; then
     RUNNING_GRUNT_WATCHER=`pgrep -f '^SCREEN.*gruntWatcher.sh$' | wc -l`
     if [ ${RUNNING_GRUNT_WATCHER} -eq 0 ] ; then
-      echo -e 'Grunt starts as screen in background'
       cd ${WEB_PATH}
+      echo -e '[1/3] Generate Attributes'
       ./bin/console sw:generate:attributes
+      echo -e '[2/3] Start Grunt as screen in background'
       screen -d -m -S grunt /vagrant/gruntWatcher.sh
-      CACHEFOLDER=`ls var/cache | cat | grep production`
-      mkdir -p var/cache/${CACHEFOLDER/production/development}
-      cp -R var/cache/${CACHEFOLDER}/* var/cache/${CACHEFOLDER/production/development}/
+      echo -e '[3/3] Prepare cache'
+      CACHE_FOLDER=`ls var/cache | cat | grep production`
+      mkdir -p var/cache/${CACHE_FOLDER/production/development}
+      cp -R var/cache/${CACHE_FOLDER}/* var/cache/${CACHE_FOLDER/production/development}/
+      curl -X HEAD -i `hostname -f` &>/dev/null &
+      echo -e '================================='
     else
       echo -e "Screen gruntWatcher is already running"
     fi

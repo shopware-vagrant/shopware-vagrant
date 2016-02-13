@@ -29,6 +29,7 @@ http {
     client_header_timeout           60;
     keepalive_timeout            10 10;
     send_timeout                    60;
+    fastcgi_read_timeout           600;
 
     ## Reset lingering timed out connections. Deflect DDoS.
     reset_timedout_connection on;

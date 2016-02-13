@@ -17,6 +17,12 @@ class shopware {
 		unless => '/usr/bin/test -e /home/vagrant/node_modules/grunt/'
 	}
 
+	exec { 'generate-md5':
+		cwd => '/var/www/',
+		command => '/usr/bin/find engine/Shopware/ -type f -name "*.php" -printf "engine/Shopware/%P\n" | /usr/bin/xargs -I {} /usr/bin/md5sum {} > engine/Shopware/Components/Check/Data/Files.md5sums',
+		unless => '/usr/bin/test -f /var/www/engine/Shopware/Components/Check/Data/Files.md5sums'
+	}
+
 	mysql::db { 'shopware':
 		ensure   => 'present',
 		user     => 'shopware',

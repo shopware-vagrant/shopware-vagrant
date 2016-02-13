@@ -74,7 +74,7 @@ class shopware {
 		require => Exec['installPhpXdebug'],
 	}
 
-	file { "${document_root}/config.php":
+	file { ["${document_root}/config_development.php", "${document_root}/config.php"]:
 		content => template('shopware/config.erb')
 	}
 

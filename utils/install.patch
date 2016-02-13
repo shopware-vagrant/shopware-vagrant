@@ -8,7 +8,7 @@ diff --git a/recovery/install/config/production.php b/recovery/install/config/pr
 +    session_set_cookie_params(600);
 +    session_start();
 +    $rootDir = dirname(__DIR__ . '/../../../../');
-+    $config = include dirname(__DIR__ . '/../../../..') . '/config.php';
++    $config = include dirname(__DIR__ . '/../../../..') . '/config_development.php';
 +    $_SESSION = [
 +            'parameters' => [
 +                'c_database_host' => isset($config['db']['host']) ? $config['db']['host'] : '',

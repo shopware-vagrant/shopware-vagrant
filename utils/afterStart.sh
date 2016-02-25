@@ -40,6 +40,6 @@ if [ -f ${WEB_PATH}/bin/console ]; then
       echo -e "Screen gruntWatcher is already running"
     fi
   else
-    echo -e "No database found. A database is needed to run grunt"
+    echo -e "No database found. A database is needed to run theme compilation with Grunt"
   fi
 fi

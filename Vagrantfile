@@ -99,7 +99,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		# Use VBoxManage to customize the VM. For example to change memory:
 		vb.customize ['modifyvm', :id, '--memory', configuration['VirtualMachine']['memory'] ||= '2048']
 		vb.customize ['modifyvm', :id, '--cpus', configuration['VirtualMachine']['cpus'] ||= '2']
-		vb.customize ['modifyvm', :id, '--groups', configuration['VirtualMachine']['group'] ||= '/Vagrant/shopware']
+		vb.customize ['modifyvm', :id, '--groups', configuration['VirtualMachine']['group'] ||= '/vagrant/shopware']
 		vb.customize ['modifyvm', :id, '--ioapic', 'on']
 
 		vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']

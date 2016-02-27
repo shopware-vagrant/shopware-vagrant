@@ -92,7 +92,7 @@ Use Shopware console via `./utils/console` proxy and pass all arguments you want
 #### Why are encrypted disks not supported?
 - NFS does not support encrypted host storage as mount.
 
-#### Why do i need local php?
+#### Why do I need local php?
 - Composer cache can be used (including token handling form github)
 
 #### Why is there a copy of Configuration.sample.yaml?
@@ -129,9 +129,9 @@ Use Shopware console via `./utils/console` proxy and pass all arguments you want
 
 ## Install required software
 ### Archlinux
-> pacman -S php php-gd vagrant virtualbox
+> pacman -S php php-gd vagrant virtualbox net-tools nfs-utils
 
-Enable gd.so afterwards - reqruied by shopware composer.
+Enable gd.so afterwards - required by shopware composer.
 
 ### Debian
 > apt-get install virtualbox vagrant php5-cli php5-gd php5-curl

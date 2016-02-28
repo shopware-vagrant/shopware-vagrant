@@ -129,12 +129,12 @@ Use Shopware console via `./utils/console` proxy and pass all arguments you want
 
 ## Install required software
 ### Archlinux
-> pacman -S php php-gd vagrant virtualbox net-tools nfs-utils
+> pacman -S php php-gd vagrant virtualbox net-tools nfs-utils git
 
 Enable gd.so afterwards - required by shopware composer.
 
 ### Debian
-> apt-get install virtualbox vagrant php5-cli php5-gd php5-curl
+> apt-get install virtualbox vagrant php5-cli php5-gd php5-curl git
 
 Recommended is virtualbox v5+ and required vagrant v1.8+
 

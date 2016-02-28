@@ -30,7 +30,7 @@ class shell {
 
 	file { '/home/vagrant/.zlogin':
 		ensure  => present,
-		content => 'cd /var/www',
+		content => "cd ${document_root}",
 		require => Package['zsh'],
 	}
 

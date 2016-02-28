@@ -55,7 +55,7 @@ patch_browsersync = configuration['Shopware']['patchBrowsersync']
 
 unless system("
 		if [ #{ARGV[0]} = 'up' -o #{ARGV[0]} = 'reload' ]; then
-			#{File.dirname(__FILE__)}/utils/beforeStart.sh #{File.dirname(__FILE__)} #{shopware_version} #{patch_browsersync}
+			#{File.dirname(__FILE__)}/utils/provision/beforeStart.sh #{File.dirname(__FILE__)} #{shopware_version} #{patch_browsersync}
 		fi
 	")
 	fail Vagrant::Errors::VagrantError.new, "Please take a look at README.md for more informations and try again"
@@ -118,9 +118,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		puppet.manifests_path = 'puppet/manifests'
 		puppet.module_path = 'puppet/modules'
 		if configuration['VirtualMachine']['puppetDebug'] ||= false
-			puppet.options = '--debug --verbose --hiera_config /vagrant/hiera.yaml'
+			puppet.options = '--debug --verbose --hiera_config /vagrant/provision/hiera.yaml'
 		else
-			puppet.options = '--hiera_config /vagrant/hiera.yaml'
+			puppet.options = '--hiera_config /vagrant/provision/hiera.yaml'
 		end
 		puppet.facter = {
 				:apt_proxy => configuration['VirtualMachine']['aptProxy'] ||= '',
@@ -133,6 +133,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				:ip_address => configuration['VirtualMachine']['ip'] ||= '172.23.42.42'
 		}
 	end
-	config.vm.provision 'after-start', type: 'shell', path: 'utils/afterStart.sh', args: ['/var/www', "#{patch_browsersync}"], :privileged => false, :run => 'always'
+	config.vm.provision 'after-start', type: 'shell', path: 'utils/provision/afterStart.sh', args: ['/var/www', "#{patch_browsersync}"], :privileged => false, :run => 'always'
 
 end

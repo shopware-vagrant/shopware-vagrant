@@ -29,7 +29,7 @@ if [ -f ${WEB_PATH}/bin/console ]; then
       echo -e '[1/3] Generate Attributes'
       ./bin/console sw:generate:attributes
       echo -e '[2/3] Start Grunt as screen in background'
-      screen -d -m -S grunt /vagrant/gruntWatcher.sh
+      screen -d -m -S grunt /vagrant/provision/gruntWatcher.sh
       echo -e '[3/3] Prepare cache'
       CACHE_FOLDER=`ls var/cache | cat | grep production`
       mkdir -p var/cache/${CACHE_FOLDER/production/development}

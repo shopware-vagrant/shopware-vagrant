@@ -9,22 +9,44 @@ class shopware {
 		command => 'ln -sf nodejs node;
 			npm install -g grunt-cli',
 		require => [Package['npm']],
-		unless  => 'test -f /usr/local/bin/grunt'
+		unless  => 'test -f /usr/local/bin/grunt',
 	}
 
 	exec { 'install-grunt-local':
-		cwd     => '/var/www/themes',
-		command => 'mkdir -p /home/vagrant/node_modules;
-			ln -sf /home/vagrant/node_modules /var/www/themes/node_modules;
-			npm install',
+		cwd     => "${document_root}/themes",
+		command => "mkdir -p /home/vagrant/node_modules;
+			ln -sf /home/vagrant/node_modules ${document_root}/themes/node_modules;
+			npm install",
 		require => [Exec['install-grunt']],
-		unless  => 'test -e /home/vagrant/node_modules/grunt/'
+		unless  => 'test -e /home/vagrant/node_modules/grunt/',
 	}
 
 	exec { 'generate-md5':
-		cwd     => '/var/www/',
+		cwd     => "${document_root}",
 		command => 'find engine/Shopware/ -type f -name "*.php" -printf "engine/Shopware/%P\n" | xargs -I {} md5sum {} > engine/Shopware/Components/Check/Data/Files.md5sums',
-		unless  => 'test -f /var/www/engine/Shopware/Components/Check/Data/Files.md5sums'
+		unless  => "test -f engine/Shopware/Components/Check/Data/Files.md5sums",
+	}
+
+	exec { 'patch-install':
+		cwd => "${document_root}",
+		command => 'patch -p1 < /vagrant/provision/install.patch',
+		onlyif  => 'test `grep -c "config_development.php" recovery/install/config/production.php` -eq 0',
+	}
+
+	if $browsersync {
+		exec { 'patch-browsersync':
+			cwd     => "${document_root}",
+			command => 'patch -p1 < /vagrant/provision/browersync.patch',
+			onlyif  => 'test `grep -c "browserSync" themes/Gruntfile.js` -eq 0',
+			before  => Exec['install-grunt-local'],
+		}
+	}
+
+	exec { 'set-version':
+		cwd => "${document_root}",
+		command => 'sed -i "s/___VERSION___/`git describe --abbrev=0 --tags | sed \'s/v//g\'`/g;s/___VERSION_TEXT___//g;s/___REVISION___/`php -r \'echo date("YmdHm",$argv[1]);\' $(git log -n1 --format="%at")`/g" engine/Shopware/Application.php recovery/install/data/version',
+		onlyif  => 'test `grep -c "___VERSION___" engine/Shopware/Application.php` -ne 0',
+		require => [Package['php5-cli'], Package['git']]
 	}
 
 	mysql::db { 'shopware':
@@ -65,14 +87,14 @@ class shopware {
 	}
 
 	exec { 'installDB':
-		cwd     => '/var/www/',
+		cwd     => "${document_root}",
 		command => 'mysql -u shopware -ppassword shopware < _sql/install/latest.sql;
 			./build/ApplyDeltas.php --username="shopware" --password="password" --host="localhost" --dbname="shopware" --mode=install;
 			./bin/console sw:generate:attributes;
 			./bin/console sw:snippets:to:db --include-plugins;
-			rm /var/www/recovery/install/data/dbsetup.lock',
+			rm recovery/install/data/dbsetup.lock',
 		require => [Exec['installIonCube'], Mysql_user["shopware@%"], Mysql_grant["shopware@%/shopware.*"]],
-		onlyif  => 'test -e /var/www/recovery/install/data/dbsetup.lock',
+		onlyif  => 'test -e recovery/install/data/dbsetup.lock',
 	}
 
 	exec{ 'installIonCube':

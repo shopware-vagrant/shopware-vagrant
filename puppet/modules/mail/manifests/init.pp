@@ -26,10 +26,11 @@ class mail {
 	}
 
 	exec { 'addPosfixConfig':
-		command => '/usr/sbin/postconf -e "recipient_canonical_classes = envelope_recipient" && /usr/sbin/postconf -e "recipient_canonical_maps = regexp:/etc/postfix/recipient_canonical_map"',
+		command => 'postconf -e "recipient_canonical_classes = envelope_recipient";
+			postconf -e "recipient_canonical_maps = regexp:/etc/postfix/recipient_canonical_map"',
 		require => File['/etc/postfix/recipient_canonical_map'],
 		notify  => Service['postfix'],
-		onlyif  => '/usr/bin/test `grep -c "recipient_canonical_" /etc/postfix/main.cf` -lt 2'
+		onlyif  => 'test `grep -c "recipient_canonical_" /etc/postfix/main.cf` -lt 2'
 	}
 
 	service { 'postfix':

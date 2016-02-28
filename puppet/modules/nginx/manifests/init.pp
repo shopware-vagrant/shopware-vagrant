@@ -5,8 +5,8 @@ class nginx {
 	}
 
 	exec { 'nginxDir':
-		command => '/bin/mkdir -p /etc/nginx/includes',
-		unless  => '/usr/bin/test -e /etc/nginx/includes/',
+		command => 'mkdir -p /etc/nginx/includes',
+		unless  => 'test -e /etc/nginx/includes/',
 	}
 
 	package { [ 'nginx', 'nginx-full', 'nginx-common']:

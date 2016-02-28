@@ -117,35 +117,37 @@ class php5 {
 	}
 
 	exec { 'installPhpcs':
-		command => '/usr/bin/pear install PHP_CodeSniffer',
-		unless  => '/usr/bin/test -f /usr/bin/phpcs',
+		command => 'pear install PHP_CodeSniffer',
+		unless  => 'test -f /usr/bin/phpcs',
 		require => Package['php-pear'],
 	}
 
 	exec { 'installPhpXdebug':
-		command => '/usr/bin/pecl install xdebug',
-		unless  => '/usr/bin/test -f /usr/lib/php5/*/xdebug.so',
+		command => 'pecl install xdebug',
+		unless  => 'test -f /usr/lib/php5/*/xdebug.so',
 		require => [Package['php-pear'], Package['php5-dev']],
 	}
 
 	exec { 'enableXdebug':
-		command => '/usr/sbin/php5enmod xdebug',
+		command => 'php5enmod xdebug',
 		require => [Exec['installPhpXdebug'], Php::Augeas['xdebug-zend_extension']],
 		notify  => Service['php5-fpm'],
-		unless => '/usr/bin/php -i | /bin/grep -q "with Xdebug"'
+		unless => 'php -i | grep -q "with Xdebug"'
 	}
 
 	exec { 'installPhpUnit':
 		cwd     => '/usr/local/bin',
-		command => '/usr/bin/wget https://phar.phpunit.de/phpunit.phar -O phpunit && /bin/chmod +x phpunit',
-		unless  => '/usr/bin/test -f /usr/local/bin/phpunit',
+		command => 'wget https://phar.phpunit.de/phpunit.phar -O phpunit;
+			chmod +x phpunit',
+		unless  => 'test -f /usr/local/bin/phpunit',
 		require => Package['php5-cli'],
 	}
 
 	exec { 'installComposer':
 		cwd     => '/usr/local/bin',
-		command => '/usr/bin/wget https://getcomposer.org/composer.phar -O composer && /bin/chmod +x composer',
-		unless  => '/usr/bin/test -f /usr/local/bin/composer',
+		command => 'wget https://getcomposer.org/composer.phar -O composer;
+			chmod +x composer',
+		unless  => 'test -f /usr/local/bin/composer',
 		require => Package['php5-cli'],
 	}
 

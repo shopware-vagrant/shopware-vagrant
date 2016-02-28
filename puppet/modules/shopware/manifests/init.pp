@@ -5,22 +5,26 @@ class shopware {
 	}
 
 	exec { 'install-grunt':
-		command => '/bin/ln -sf /usr/bin/nodejs /usr/bin/node && /usr/bin/npm install -g grunt-cli',
+		cwd     => '/usr/bin/',
+		command => 'ln -sf nodejs node;
+			npm install -g grunt-cli',
 		require => [Package['npm']],
-		unless => '/usr/bin/test -f /usr/local/bin/grunt'
+		unless  => 'test -f /usr/local/bin/grunt'
 	}
 
 	exec { 'install-grunt-local':
-		cwd => '/var/www/themes',
-		command => '/bin/mkdir -p /home/vagrant/node_modules && /bin/ln -sf /home/vagrant/node_modules /var/www/themes/node_modules && /usr/bin/npm install',
+		cwd     => '/var/www/themes',
+		command => 'mkdir -p /home/vagrant/node_modules;
+			ln -sf /home/vagrant/node_modules /var/www/themes/node_modules;
+			npm install',
 		require => [Exec['install-grunt']],
-		unless => '/usr/bin/test -e /home/vagrant/node_modules/grunt/'
+		unless  => 'test -e /home/vagrant/node_modules/grunt/'
 	}
 
 	exec { 'generate-md5':
-		cwd => '/var/www/',
-		command => '/usr/bin/find engine/Shopware/ -type f -name "*.php" -printf "engine/Shopware/%P\n" | /usr/bin/xargs -I {} /usr/bin/md5sum {} > engine/Shopware/Components/Check/Data/Files.md5sums',
-		unless => '/usr/bin/test -f /var/www/engine/Shopware/Components/Check/Data/Files.md5sums'
+		cwd     => '/var/www/',
+		command => 'find engine/Shopware/ -type f -name "*.php" -printf "engine/Shopware/%P\n" | xargs -I {} md5sum {} > engine/Shopware/Components/Check/Data/Files.md5sums',
+		unless  => 'test -f /var/www/engine/Shopware/Components/Check/Data/Files.md5sums'
 	}
 
 	mysql::db { 'shopware':
@@ -62,14 +66,20 @@ class shopware {
 
 	exec { 'installDB':
 		cwd     => '/var/www/',
-		command => '/usr/bin/mysql -u shopware -ppassword shopware < _sql/install/latest.sql && ./build/ApplyDeltas.php --username="shopware" --password="password" --host="localhost" --dbname="shopware" --mode=install && ./bin/console sw:generate:attributes && ./bin/console sw:snippets:to:db --include-plugins && rm /var/www/recovery/install/data/dbsetup.lock',
+		command => 'mysql -u shopware -ppassword shopware < _sql/install/latest.sql;
+			./build/ApplyDeltas.php --username="shopware" --password="password" --host="localhost" --dbname="shopware" --mode=install;
+			./bin/console sw:generate:attributes;
+			./bin/console sw:snippets:to:db --include-plugins;
+			rm /var/www/recovery/install/data/dbsetup.lock',
 		require => [Exec['installIonCube'], Mysql_user["shopware@%"], Mysql_grant["shopware@%/shopware.*"]],
-		onlyif => '/usr/bin/test -e /var/www/recovery/install/data/dbsetup.lock',
+		onlyif  => 'test -e /var/www/recovery/install/data/dbsetup.lock',
 	}
 
 	exec{ 'installIonCube':
-		command => '/usr/bin/wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz && /bin/tar xf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local/ && rm ioncube_loaders_lin_x86-64.tar.gz',
-		unless  => '/usr/bin/test -f /usr/local/ioncube/ioncube_loader_lin_5.6.so',
+		command => 'wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz;
+			tar xf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local/;
+			rm ioncube_loaders_lin_x86-64.tar.gz',
+		unless  => 'test -f /usr/local/ioncube/ioncube_loader_lin_5.6.so',
 		require => [Package['php5-fpm'], Package['wget']],
 		notify  => Service['php5-fpm'],
 	}
@@ -85,10 +95,10 @@ class shopware {
 	}
 
 	exec { 'enableIonCube':
-		command => '/usr/sbin/php5enmod ioncube',
+		command => 'php5enmod ioncube',
 		require => [ File['/etc/php5/mods-available/ioncube.ini']],
 		notify  => Service['php5-fpm'],
-		unless => '/usr/bin/php -i | /bin/grep -q "ionCube Loader"'
+		unless  => 'php -i | grep -q "ionCube Loader"'
 	}
 
 	file { [

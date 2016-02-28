@@ -1,3 +1,5 @@
+Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/local/bin/', '/usr/sbin/' ] }
+
 class { '::mysql::server':
 	root_password    => 'password',
 	override_options => {
@@ -11,7 +13,6 @@ class { '::mysql::server':
 	},
 	restart          => true,
 }
-
 
 include apt
 include defaultpackage

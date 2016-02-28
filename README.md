@@ -138,6 +138,11 @@ Enable gd.so afterwards - required by shopware composer.
 
 Recommended is virtualbox v5+ and required vagrant v1.8+
 
+### Support
+- [Issues & Questions](https://gitlab.com/xf-/shopware-vagrant/)
+- [Wiki](https://gitlab.com/xf-/shopware-vagrant/wikis/home)
+- Directly via freenode Shopware IRC - username xaver
+
 ### Powered by
 - Crafted with love by [Onedrop](https://1drop.de/)
 - based on [FluidTYPO3 Vagrant](https://github.com/FluidTYPO3/FluidTYPO3-Vagrant/)

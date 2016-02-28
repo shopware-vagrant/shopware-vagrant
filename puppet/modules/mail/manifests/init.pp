@@ -50,6 +50,13 @@ class mail {
 		notify  => Service['dovecot'],
 	}
 
+	exec { 'addDovecotConfig':
+		command => 'echo "auth_mechanisms = plain login cram-md5\ndisable_plaintext_auth = no" >> /etc/dovecot/conf.d/10-auth.conf',
+		require => Package['dovecot-imapd'],
+		notify  => Service['dovecot'],
+		onlyif  => 'test `grep -c "plain login cram-md5" /etc/dovecot/conf.d/10-auth.conf` -eq 0'
+	}
+
 	service { 'dovecot':
 		ensure  => running,
 		require => Package['dovecot-imapd'],

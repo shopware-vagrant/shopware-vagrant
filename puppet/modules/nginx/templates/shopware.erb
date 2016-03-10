@@ -16,6 +16,10 @@ location = /templates/_default/backend/_resources/resources/css/icon-set.css {
     gzip off;
 }
 
+location = /backend/grunt/reload/ {
+    return 200;
+}
+
 ## Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
 location ~ /\. {
     deny all;
@@ -25,22 +29,22 @@ location ~ /\. {
 
 ## Deny all attems to access possible configuration files
 location ~ \.(tpl|yml|ini|log)$ {
-	deny all;
+    deny all;
 }
 
 ## Deny access to media upload folder
 location ^~ /media/temp/ {
-	deny all;
+    deny all;
 }
 
 # Shopware < 5.1 caches
 location ^~ /cache/ {
-	deny all;
+    deny all;
 }
 
 # Shopware >= 5.1 caches and logs
 location ^~ /var/ {
-	deny all;
+    deny all;
 }
 
 location ^~ /files/documents/ {
@@ -49,7 +53,7 @@ location ^~ /files/documents/ {
 
 ## Fallback for old media paths
 location ^~ /media/ {
-	try_files $uri /shopware.php?controller=Media&action=fallback;
+    try_files $uri /shopware.php?controller=Media&action=fallback;
 }
 
 # Block direct access to ESDs, but allow the follwing download options:
@@ -57,92 +61,92 @@ location ^~ /media/ {
 #  * 'X-Accel' (optimized)
 # Also see http://wiki.shopware.com/ESD_detail_1116.html#Ab_Shopware_4.2.2
 location ^~ /files/552211cce724117c3178e3d22bec532ec/ {
-	internal;
+    internal;
 }
 
 # Shopware >= 4.3 unstall / update
 location /recovery/install {
-	index index.php;
-	try_files $uri /recovery/install/index.php?$args;
+    index index.php;
+    try_files $uri /recovery/install/index.php?$args;
 }
 
 location /recovery/update {
-	index index.php;
-	try_files $uri /recovery/update/index.php?$args;
+    index index.php;
+    try_files $uri /recovery/update/index.php?$args;
 }
 
 
 location / {
-	location ~* "^/themes/Frontend/Responsive/frontend/_public/vendors/fonts/open-sans-fontface/(?:.+)\.(?:ttf|eot|svg|woff)$" {
-		expires max;
-		add_header Cache-Control "public";
-		access_log off;
-		log_not_found off;
-	}
+    location ~* "^/themes/Frontend/Responsive/frontend/_public/vendors/fonts/open-sans-fontface/(?:.+)\.(?:ttf|eot|svg|woff)$" {
+        expires max;
+        add_header Cache-Control "public";
+        access_log off;
+        log_not_found off;
+    }
 
-	location ~* "^/themes/Frontend/Responsive/frontend/_public/src/fonts/(?:.+)\.(?:ttf|eot|svg|woff)$" {
-		expires max;
-		add_header Cache-Control "public";
-		access_log off;
-		log_not_found off;
-	}
+    location ~* "^/themes/Frontend/Responsive/frontend/_public/src/fonts/(?:.+)\.(?:ttf|eot|svg|woff)$" {
+        expires max;
+        add_header Cache-Control "public";
+        access_log off;
+        log_not_found off;
+    }
 
-	location ~* "^/web/cache/(?:[0-9]{10})_(?:.+)\.(?:js|css)$" {
-		expires max;
-		add_header Cache-Control "public";
-		access_log off;
-		log_not_found off;
-	}
+    location ~* "^/web/cache/(?:[0-9]{10})_(?:.+)\.(?:js|css)$" {
+        expires max;
+        add_header Cache-Control "public";
+        access_log off;
+        log_not_found off;
+    }
 
 
-	## All static files will be served directly.
-	location ~* ^.+\.(?:css|cur|js|jpe?g|gif|ico|png|html|xml)$ {
-		## Defining rewrite rules
-		rewrite files/documents/.* /engine last;
-		rewrite backend/media/(.*) /media/$1 last;
+    ## All static files will be served directly.
+    location ~* ^.+\.(?:css|cur|js|jpe?g|gif|ico|png|html|xml)$ {
+        ## Defining rewrite rules
+        rewrite files/documents/.* /engine last;
+        rewrite backend/media/(.*) /media/$1 last;
 
-		expires 1w;
-		add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        expires 1w;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
 
-		access_log off;
-		# The directive enables or disables messages in error_log about files not found on disk.
-		log_not_found off;
+        access_log off;
+        # The directive enables or disables messages in error_log about files not found on disk.
+        log_not_found off;
 
-		tcp_nodelay off;
-		## Set the OS file cache.
-		open_file_cache max=3000 inactive=120s;
-		open_file_cache_valid 45s;
-		open_file_cache_min_uses 2;
-		open_file_cache_errors off;
+        tcp_nodelay off;
+        ## Set the OS file cache.
+        open_file_cache max=3000 inactive=120s;
+        open_file_cache_valid 45s;
+        open_file_cache_min_uses 2;
+        open_file_cache_errors off;
 
-		## Fallback to shopware
-		## comment in if needed
-		#try_files $uri @shopware;
-	}
+        ## Fallback to shopware
+        ## comment in if needed
+        #try_files $uri @shopware;
+    }
 
-	index shopware.php index.php;
-	try_files $uri $uri/ /shopware.php?$args;
+    index shopware.php index.php;
+    try_files $uri $uri/ /shopware.php?$args;
 }
 
 ## XML Sitemap support.
 location = /sitemap.xml {
-	log_not_found off;
-	access_log off;
-	try_files $uri @shopware;
+    log_not_found off;
+    access_log off;
+    try_files $uri @shopware;
 }
 
 ## robots.txt support.
 location = /robots.txt {
-	log_not_found off;
-	access_log off;
+    log_not_found off;
+    access_log off;
 }
 
 location @shopware {
-	rewrite / /shopware.php;
+    rewrite / /shopware.php;
 }
 
 location ~ \.php$ {
-	try_files $uri $uri/ =404;
+    try_files $uri $uri/ =404;
 <% if @browsersync == 'true' %>
     sub_filter '<script src="/web/cache/' '<script type=\'text/javascript\' id="__bs_script__"> document.write("<script async src=\'http://HOST:3000/browser-sync/browser-sync-client.js\'><\/script>".replace("HOST", location.hostname));</script><script src="/web/cache/';
 <% end %>
@@ -156,7 +160,7 @@ location ~ \.php$ {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     fastcgi_param SHOPWARE_ENV    $shopware_env if_not_empty;
-    fastcgi_param ENV             $shopware_env if_not_empty; # BC for older SW versions
+    fastcgi_param VAGRANT_BOX     'shopware-vagrant';
 
     fastcgi_buffers 8 128k;
     fastcgi_buffer_size 256k;

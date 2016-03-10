@@ -1,7 +1,7 @@
 class tools {
 
 	exec { 'phpMyAdmin':
-		command  => 'git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin &',
+		command  => 'test $(git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin;cd /usr/share/php/phpMyAdmin;cp config.sample.inc.php config.inc.php;echo \'$cfg["AllowThirdPartyFraming"] = true;$cfg["Servers"][$i]["user"] = "root";$cfg["Servers"][$i]["password"] = "password";$cfg["Servers"][$i]["auth_type"] = "config";\' >> config.inc.php) &',
 		unless   => 'test -f /usr/share/php/phpMyAdmin/index.php',
 		require  => Package['php-pear'],
 	}
@@ -25,7 +25,7 @@ class tools {
 	}
 
 	exec { 'webgrind':
-		command  => 'git clone --single-branch --depth 1 --branch master https://github.com/jokkedk/webgrind.git /usr/share/php/webgrind &',
+		command  => 'git clone --single-branch --depth 1 --branch master https://github.com/alpha0010/webgrind.git /usr/share/php/webgrind &',
 		unless   => 'test -f /usr/share/php/webgrind/index.php',
 		require  => Package['php-pear'],
 	}
@@ -60,6 +60,21 @@ class tools {
 	file { '/usr/share/php/roundcubemail/config/config.inc.php':
 		content => template('tools/roundcubemail.config.erb'),
 		require => Exec['roundcube-sql-import'],
+	}
+
+	file { '/usr/share/php/roundcubemail/plugins/vagrant_autologon':
+		ensure => directory,
+		require => Exec['roundcubemail'],
+	}
+
+	file { '/usr/share/php/roundcubemail/plugins/vagrant_autologon/vagrant_autologon.php':
+		content => template('tools/autologon.erb'),
+		require => File['/usr/share/php/roundcubemail/plugins/vagrant_autologon'],
+	}
+
+
+	file { '/usr/share/php/GruntLog.php':
+		content => template('tools/GruntLog.php')
 	}
 
 	file { ['/usr/share/php/roundcubemail/temp', '/usr/share/php/roundcubemail/logs']:

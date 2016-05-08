@@ -60,6 +60,7 @@ Create a Debian jessie based Virtualbox VM, installs Shopware with a few helper 
     * Opcache http://project.name.dev.domain.com/opcache-dashboard.php
     * OpCacheGUI http://project.name.dev.domain.com/OpCacheGUI
 - Catch mails - All mails are forwarded to development@localhost
+- Update script for shopware. Start `./utils/updateShopware.sh` (Reads target version from Configuration.yaml)
 
 
 ### Warning

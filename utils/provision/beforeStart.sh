@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 WEB_PATH=$1
 SHOPWARE_VERSION=$2
 PATCH_BROWSERSYNC=$3

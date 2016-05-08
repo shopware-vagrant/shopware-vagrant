@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/usr/bin/env bash
 vagrant ssh -c "cd /var/www && ./bin/console $@"

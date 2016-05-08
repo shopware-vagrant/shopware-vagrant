@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 WEB_PATH=$1
 PATCH_BROWSERSYNC=$2
 # Load tmpfs mount AFTER nfs

@@ -1,7 +1,7 @@
 diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
 --- a/themes/Gruntfile.js
 +++ b/themes/Gruntfile.js
-@@ -28,6 +28,19 @@
+@@ -25,6 +25,19 @@ module.exports = function (grunt) {
          variables[key] = config.config[key];
      }
 
@@ -21,7 +21,7 @@ diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
      grunt.initConfig({
          uglify: {
              production: {
-@@ -95,6 +108,23 @@
+@@ -103,6 +116,23 @@ module.exports = function (grunt) {
                  '../themes/Frontend/**/_public/src/js/*.js',
                  '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
              ]
@@ -45,12 +45,13 @@ diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
          }
      });
 
-@@ -102,7 +132,8 @@
-     grunt.loadNpmTasks('grunt-contrib-watch');
+@@ -110,8 +140,9 @@ module.exports = function (grunt) {
      grunt.loadNpmTasks('grunt-contrib-uglify');
      grunt.loadNpmTasks('grunt-contrib-jshint');
+     grunt.loadNpmTasks('grunt-chokidar');
 +    grunt.loadNpmTasks('grunt-browser-sync');
 
+     grunt.renameTask('chokidar', 'watch');
      grunt.registerTask('production', [ 'jshint', 'less:production', 'uglify:production' ]);
 -    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
 +    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'browserSync', 'watch' ]);

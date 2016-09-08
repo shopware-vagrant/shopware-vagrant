@@ -3,20 +3,20 @@ class tools {
 	exec { 'phpMyAdmin':
 		command  => 'git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin &',
 		unless   => 'test -f /usr/share/php/phpMyAdmin/index.php',
-		require  => Package['php5-common'],
+		require  => Package['php-pear'],
 	}
 
 	exec { 'opcache-dashboard':
 		cwd     => '/usr/share/php',
 		command => 'wget https://raw.githubusercontent.com/carlosbuenosvinos/opcache-dashboard/master/opcache.php -O opcache-dashboard.php',
 		unless  => 'test -f /usr/share/php/opcache-dashboard.php',
-		require => Package['php5-common'],
+		require => Package['php-pear'],
 	}
 
 	exec { 'OpCacheGUI':
 		command  => 'git clone --single-branch --depth 1 --branch master https://github.com/PeeHaa/OpCacheGUI.git /usr/share/php/OpCacheGUI',
 		unless   => 'test -f /usr/share/php/OpCacheGUI/index.php',
-		require  => Package['php5-common'],
+		require  => Package['php-pear'],
 	}
 
 	file { '/usr/share/php/OpCacheGUI/init.example.php':
@@ -27,7 +27,7 @@ class tools {
 	exec { 'webgrind':
 		command  => 'git clone --single-branch --depth 1 --branch master https://github.com/jokkedk/webgrind.git /usr/share/php/webgrind &',
 		unless   => 'test -f /usr/share/php/webgrind/index.php',
-		require  => Package['php5-common'],
+		require  => Package['php-pear'],
 	}
 
 	file { '/usr/local/bin/dot':
@@ -39,7 +39,7 @@ class tools {
 	exec { 'roundcubemail':
 		command  => 'git clone --single-branch --depth 1 --branch master https://github.com/roundcube/roundcubemail.git /usr/share/php/roundcubemail',
 		unless   => 'test -f /usr/share/php/roundcubemail/index.php',
-		require  => Package['php5-common'],
+		require  => Package['php-pear'],
 	}
 
 	mysql::db { 'roundcube':

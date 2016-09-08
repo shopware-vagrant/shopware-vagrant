@@ -1,6 +1,6 @@
 class php5 {
 
-	package { ['php5-cli', 'php5-apcu', 'php5-fpm', 'php5-mysqlnd', 'php5-gd', 'php5-intl', 'php5-mcrypt', 'php-pear', 'php5-imap', 'php-auth', 'mcrypt', 'imagemagick', 'php5-curl', 'php5-tidy', 'php5-xmlrpc', 'php5-xsl', 'php-mail', 'php5-dev', 'php5-common']:
+	package { ['php5-cli', 'php5-apcu', 'php5-fpm', 'php5-mysqlnd', 'php5-gd', 'php5-intl', 'php5-mcrypt', 'php-pear', 'php5-imap', 'mcrypt', 'imagemagick', 'php5-curl', 'php5-tidy', 'php5-xmlrpc', 'php5-xsl', 'php5-dev', 'php5-common']:
 		ensure => present,
 	}
 

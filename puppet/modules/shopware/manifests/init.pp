@@ -88,11 +88,10 @@ class shopware {
 
 	exec { 'installDB':
 		cwd     => "${document_root}",
-		command => 'mysql -u shopware -ppassword shopware < _sql/install/latest.sql;
-			./build/ApplyDeltas.php --username="shopware" --password="password" --host="localhost" --dbname="shopware" --mode=install;
-			./bin/console sw:generate:attributes;
-			./bin/console sw:snippets:to:db --include-plugins;
-			rm recovery/install/data/dbsetup.lock',
+		command => "${document_root}/bin/console sw:database:setup -q --steps=drop,create,import,setupShop;
+			${document_root}/bin/console sw:generate:attributes;
+			${document_root}/bin/console sw:snippets:to:db --include-plugins;
+			rm ${document_root}/recovery/install/data/dbsetup.lock",
 		require => [Exec['installIonCube'], Mysql_user["shopware@%"], Mysql_grant["shopware@%/shopware.*"]],
 		onlyif  => 'test -e recovery/install/data/dbsetup.lock',
 	}

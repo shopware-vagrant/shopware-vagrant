@@ -50,7 +50,7 @@ Create a Debian jessie based Virtualbox VM, installs Shopware with a few helper 
 - Nginx 1.8.x with php-fpm
 - MariaDB 10.1
 - Postfix + Dovecot (IMAP for mail-tests)
-- PHP - ioncube, composer, xdebug, phpunite, phpcs
+- PHP 7 - ioncube, composer, xdebug, phpunite, phpcs
 - Shopware console proxy
 - zsh with grml
 - github sources (Webgrind, Rouncubemail, phpMyAdmin, OpCacheGUI)
@@ -64,6 +64,7 @@ Create a Debian jessie based Virtualbox VM, installs Shopware with a few helper 
 
 ### Warning
 - Puppet MySQL module is patched to use MariaDB in Debian.
+- Some old encrypted Shopware Plugins are not compatible with ioncube for php7
 
 ### Support
 - [Issues & Questions](https://gitlab.com/xf-/shopware-vagrant/)

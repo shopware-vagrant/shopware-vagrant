@@ -1,34 +1,34 @@
-class php5 {
+class php7 {
 
-	package { ['php5-cli', 'php5-apcu', 'php5-fpm', 'php5-mysqlnd', 'php5-gd', 'php5-intl', 'php5-mcrypt', 'php-pear', 'php5-imap', 'mcrypt', 'imagemagick', 'php5-curl', 'php5-tidy', 'php5-xmlrpc', 'php5-xsl', 'php5-dev', 'php5-common']:
+	package { ['php7.0-cli', 'php7.0-apcu', 'php7.0-fpm', 'php7.0-mysqlnd', 'php7.0-zip', 'php7.0-mbstring', 'php7.0-gd', 'php7.0-intl', 'php7.0-mcrypt', 'php-pear', 'php7.0-imap', 'mcrypt', 'imagemagick', 'php7.0-curl', 'php7.0-tidy', 'php7.0-xmlrpc', 'php7.0-xsl', 'php7.0-dev', 'php7.0-common', 'php7.0-xdebug']:
 		ensure => present,
 	}
 
-	file { '/var/log/php5/':
+	file { '/var/log/php7.0/':
 		ensure => 'directory',
-		notify => Service['php5-fpm'],
+		notify => Service['php7.0-fpm'],
 	}
 
-	service { 'php5-fpm':
+	service { 'php7.0-fpm':
 		ensure  => running,
-		require => Package['php5-fpm'],
+		require => Package['php7.0-fpm'],
 	}
 
-	file { '/etc/php5/fpm/pool.d/www.conf':
+	file { '/etc/php/7.0/fpm/pool.d/www.conf':
 		ensure => absent,
-		require => [Package['php5-fpm'], File['/etc/php5/fpm/pool.d/vagrant.conf']],
-		notify => Service['php5-fpm'],
+		require => [Package['php7.0-fpm'], File['/etc/php/7.0/fpm/pool.d/vagrant.conf']],
+		notify => Service['php7.0-fpm'],
 	}
 
-	file { '/etc/php5/fpm/pool.d/vagrant.conf':
-		content => template('php5/php5-fpm.erb'),
-		require => Package['php5-fpm'],
+	file { '/etc/php/7.0/fpm/pool.d/vagrant.conf':
+		content => template('php7/php7.0-fpm.erb'),
+		require => Package['php7.0-fpm'],
 	}
 
 	define php::augeas (
 		$entry,
 		$ensure = present,
-		$target = '/etc/php5/fpm/php.ini',
+		$target = '/etc/php/7.0/fpm/php.ini',
 		$value = '',
 	) {
 		$changes = $ensure ? {
@@ -39,8 +39,8 @@ class php5 {
 			incl    => $target,
 			lens    => 'Php.lns',
 			changes => $changes,
-			notify  => Service['php5-fpm'],
-			require => [Package['augeas-tools'], Package['php5-fpm']],
+			notify  => Service['php7.0-fpm'],
+			require => [Package['augeas-tools'], Package['php7.0-fpm']],
 		}
 	}
 
@@ -65,7 +65,7 @@ class php5 {
 			value => '240';
 		'php-open_basedir':
 			entry => 'PHP/open_basedir',
-			value => "${document_root}:/usr/share/php5:/usr/share/php:/tmp:/var/log:/usr/bin:/dev/urandom:/usr/local/bin";
+			value => "${document_root}:/usr/share/php7.0:/usr/share/php:/tmp:/var/log:/usr/bin:/dev/urandom:/usr/local/bin";
 		'php-upload_tmp_dir':
 			entry => 'PHP/upload_tmp_dir',
 			value => '/tmp';
@@ -78,42 +78,42 @@ class php5 {
 		'php-date_timezone-cli':
 			entry  => 'Date/date.timezone',
 			value  => 'Europe/Berlin',
-			target => '/etc/php5/cli/php.ini';
+			target => '/etc/php/7.0/cli/php.ini';
 		'php-cgi_fix_pathinfo':
 			entry => 'PHP/cgi.fix_pathinfo',
 			value => '0';
 		'xdebug-xdebug_max_nesting_level':
 			entry  => 'xdebug/xdebug.max_nesting_level',
 			value  => '1000',
-			target => '/etc/php5/mods-available/xdebug.ini';
+			target => '/etc/php/7.0/mods-available/xdebug.ini';
 		'xdebug-xdebug_remote_enable':
 			entry  => 'xdebug/xdebug.remote_enable',
 			value  => 'on',
-			target => '/etc/php5/mods-available/xdebug.ini';
+			target => '/etc/php/7.0/mods-available/xdebug.ini';
 		'xdebug-xdebug_remote_connect_back':
 			entry  => 'xdebug/xdebug.remote_connect_back',
 			value  => 'on',
-			target => '/etc/php5/mods-available/xdebug.ini';
+			target => '/etc/php/7.0/mods-available/xdebug.ini';
 		'xdebug-xdebug_profiler_enable_trigger':
 			entry  => 'xdebug/xdebug.profiler_enable_trigger',
 			value  => '1',
-			target => '/etc/php5/mods-available/xdebug.ini';
+			target => '/etc/php/7.0/mods-available/xdebug.ini';
 		'xdebug-zend_extension':
 			entry  => 'xdebug/zend_extension',
 			value  => 'xdebug.so',
-			target => '/etc/php5/mods-available/xdebug.ini';
+			target => '/etc/php/7.0/mods-available/xdebug.ini';
 		'apcu-apc:shm_size':
 			entry  => 'apcu/apc.shm_size',
 			value  => '512M',
-			target => '/etc/php5/mods-available/apcu.ini';
+			target => '/etc/php/7.0/mods-available/apcu.ini';
 		'opcache-opcache:max_accelerated_files':
 			entry  => 'opcache/max_accelerated_files',
 			value  => '15000',
-			target => '/etc/php5/mods-available/opcache.ini';
+			target => '/etc/php/7.0/mods-available/opcache.ini';
 		'opcache-opcache:memory_consumption':
 			entry  => 'opcache/memory_consumption',
 			value  => '128',
-			target => '/etc/php5/mods-available/opcache.ini';
+			target => '/etc/php/7.0/mods-available/opcache.ini';
 	}
 
 	exec { 'installPhpcs':
@@ -122,25 +122,12 @@ class php5 {
 		require => Package['php-pear'],
 	}
 
-	exec { 'installPhpXdebug':
-		command => 'pecl install xdebug',
-		unless  => 'test -f /usr/lib/php5/*/xdebug.so',
-		require => [Package['php-pear'], Package['php5-dev']],
-	}
-
-	exec { 'enableXdebug':
-		command => 'php5enmod xdebug',
-		require => [Exec['installPhpXdebug'], Php::Augeas['xdebug-zend_extension']],
-		notify  => Service['php5-fpm'],
-		unless => 'php -i | grep -q "with Xdebug"'
-	}
-
 	exec { 'installPhpUnit':
 		cwd     => '/usr/local/bin',
 		command => 'wget https://phar.phpunit.de/phpunit.phar -O phpunit;
 			chmod +x phpunit',
 		unless  => 'test -f /usr/local/bin/phpunit',
-		require => Package['php5-cli'],
+		require => Package['php7.0-cli'],
 	}
 
 	exec { 'installComposer':
@@ -148,7 +135,7 @@ class php5 {
 		command => 'wget https://getcomposer.org/composer.phar -O composer;
 			chmod +x composer',
 		unless  => 'test -f /usr/local/bin/composer',
-		require => Package['php5-cli'],
+		require => Package['php7.0-cli'],
 	}
 
 }

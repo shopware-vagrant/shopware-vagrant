@@ -1,6 +1,6 @@
 class nginx {
 
-	package { [ 'apache2-mpm-prefork', 'apache2-utils', 'apache2.2-bin', 'apache2.2-common', 'libapache2-mod-php5' ]:
+	package { [ 'apache2-mpm-prefork', 'apache2-utils', 'apache2.2-bin', 'apache2.2-common', 'libapache2-mod-php7.0' ]:
 		ensure => purged,
 	}
 

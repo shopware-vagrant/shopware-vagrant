@@ -46,7 +46,7 @@ class shopware {
 		cwd => "${document_root}",
 		command => 'sed -i "s/___VERSION___/`git describe --abbrev=0 --tags | sed \'s/v//g\'`/g;s/___VERSION_TEXT___//g;s/___REVISION___/`php -r \'echo date("YmdHm",$argv[1]);\' $(git log -n1 --format="%at")`/g" engine/Shopware/Application.php recovery/install/data/version',
 		onlyif  => 'test `grep -c "___VERSION___" engine/Shopware/Application.php` -ne 0',
-		require => [Package['php5-cli'], Package['git']]
+		require => [Package['php7.0-cli'], Package['git']]
 	}
 
 	mysql::db { 'shopware':
@@ -100,15 +100,14 @@ class shopware {
 		command => 'wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz;
 			tar xf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local/;
 			rm ioncube_loaders_lin_x86-64.tar.gz',
-		unless  => 'test -f /usr/local/ioncube/ioncube_loader_lin_5.6.so',
-		require => [Package['php5-fpm'], Package['wget']],
-		notify  => Service['php5-fpm'],
+		unless  => 'test -f /usr/local/ioncube/ioncube_loader_lin_7.0.so',
+		require => [Package['php7.0-fpm'], Package['wget']]
 	}
 
-	file { '/etc/php5/mods-available/ioncube.ini':
-		content => "; priority=05\nzend_extension=/usr/local/ioncube/ioncube_loader_lin_5.6.so",
+	file { '/etc/php/7.0/mods-available/ioncube.ini':
+		content => "; priority=05\nzend_extension=/usr/local/ioncube/ioncube_loader_lin_7.0.so",
 		ensure  => present,
-		require => Exec['installPhpXdebug'],
+		require => [Exec['installIonCube']]
 	}
 
 	file { ["${document_root}/config_development.php", "${document_root}/config.php"]:
@@ -116,10 +115,10 @@ class shopware {
 	}
 
 	exec { 'enableIonCube':
-		command => 'php5enmod ioncube',
-		require => [ File['/etc/php5/mods-available/ioncube.ini']],
-		notify  => Service['php5-fpm'],
-		unless  => 'php -i | grep -q "ionCube Loader"'
+		command => 'ln -sf /etc/php/7.0/mods-available/ioncube.ini /etc/php/7.0/fpm/conf.d/05-ioncube.ini && ln -sf /etc/php/7.0/mods-available/ioncube.ini /etc/php/7.0/cli/conf.d/05-ioncube.ini',
+		require => [ File['/etc/php/7.0/mods-available/ioncube.ini']],
+		notify  => Service['php7.0-fpm'],
+		unless  => 'php -i | grep -q "ionCube Loader"',
 	}
 
 	file { [

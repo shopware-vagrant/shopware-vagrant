@@ -20,7 +20,7 @@ include network
 include shell
 include ssl
 include nginx
-include php5
+include php7
 include mail
 include tools
 include shopware

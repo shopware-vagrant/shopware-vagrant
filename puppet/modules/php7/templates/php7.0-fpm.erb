@@ -1,5 +1,5 @@
 [global]
-error_log = /var/log/php5/fpm-error.log
+error_log = /var/log/php7.0/fpm-error.log
 
 [vagrant]
 listen = /var/run/php-fpm-vagrant.socket
@@ -10,7 +10,7 @@ listen.mode=0660
 user = vagrant
 group = vagrant
 request_slowlog_timeout = 5s
-slowlog = /var/log/php5/slow.log
+slowlog = /var/log/php7.0/slow.log
 pm = dynamic
 pm.max_children = 75
 pm.start_servers = 10
@@ -26,5 +26,5 @@ env[HOSTNAME] = $HOSTNAME
 env[TMP] = /tmp
 env[TMPDIR] = /tmp
 env[TEMP] = /tmp
-php_admin_value[error_log] = /var/log/php5/error.log
+php_admin_value[error_log] = /var/log/php7.0/error.log
 php_admin_flag[log_errors] = on

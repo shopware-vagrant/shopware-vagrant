@@ -68,6 +68,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	config.vm.box = 'debian/jessie64'
 	config.vm.hostname = configuration['VirtualMachine']['domain'] ||= 'dev.fluidtypo3.org'
+	config.vm.post_up_message = ''
 	config.hostmanager.enabled = true
 	config.hostmanager.manage_host = true
 	config.hostmanager.ignore_private_ip = false

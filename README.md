@@ -5,7 +5,7 @@ Create a Debian jessie based Virtualbox VM, installs Shopware with a few helper 
 
 ### Requirements
 - Linux, Mac
-- New setup requires php-{gd,curl} for composer
+- New setup requires php-curl for composer or composer pre-installed
 - For installation Internet connection with enough broadband
 - We only test with Virtualbox
 - Running local nfs-server
@@ -50,7 +50,7 @@ Create a Debian jessie based Virtualbox VM, installs Shopware with a few helper 
 - Nginx 1.8.x with php-fpm
 - MariaDB 10.1
 - Postfix + Dovecot (IMAP for mail-tests)
-- PHP - ioncube, Composer, xdebug, phpunite, phpcs
+- PHP - ioncube, composer, xdebug, phpunite, phpcs
 - Shopware console proxy
 - zsh with grml
 - github sources (Webgrind, Rouncubemail, phpMyAdmin, OpCacheGUI)

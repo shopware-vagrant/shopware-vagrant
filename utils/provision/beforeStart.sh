@@ -38,9 +38,9 @@ if [ ! -f ./www/shopware.php ]; then
       ${COMPOSER} config --global github-oauth.github.com ${TOKEN}
     fi
     mkdir -p ./html
-    ${COMPOSER} install --no-interaction --optimize-autoloader
+    ${COMPOSER} install --no-interaction --optimize-autoloader --no-suggest --ignore-platform-reqs
     cd ./recovery/common
-    ${COMPOSER} install --no-interaction --optimize-autoloader
+    ${COMPOSER} install --no-interaction --optimize-autoloader --no-suggest --ignore-platform-reqs
     cd ${WEB_PATH}/www
     touch recovery/install/data/dbsetup.lock
     rm -f composer.phar

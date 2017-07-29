@@ -36,8 +36,8 @@ class shopware {
 	if $browsersync {
 		exec { 'patch-browsersync':
 			cwd     => "${document_root}",
-			command => 'patch -p0 < /vagrant/provision/browersync.patch',
-			onlyif  => 'test `grep -c "browserSync" themes/Gruntfile.js` -eq 0',
+			command => 'patch -p1 < /vagrant/provision/browersync.patch',
+			onlyif  => 'test `grep -c "browserSync" themes/grunt-tasks/tasks/default.js` -eq 0',
 			before  => Exec['install-grunt-local'],
 		}
 	}

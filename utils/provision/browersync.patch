@@ -1,78 +1,54 @@
-diff --git themes/Gruntfile.js themes/Gruntfile.js
---- themes/Gruntfile.js
-+++ themes/Gruntfile.js
-@@ -29,6 +29,19 @@ module.exports = function (grunt) {
-         variables[key] = config.config[key];
-     }
-
-+    var ifaces = require('os').networkInterfaces();
-+    var lookupIpAddress = null;
-+    for (var dev in ifaces) {
-+        if (dev != "eth0" && dev != "eth1") {
-+            continue;
-+        }
-+        ifaces[dev].forEach(function (details) {
-+            if (details.family == 'IPv4') {
-+                lookupIpAddress = details.address;
-+            }
-+        });
+diff --git a/themes/grunt-tasks/config/browserSync.js b/themes/grunt-tasks/config/browserSync.js
+new file mode 100644
+--- /dev/null
++++ b/themes/grunt-tasks/config/browserSync.js
+@@ -0,0 +1,30 @@
++var ifaces = require('os').networkInterfaces();
++var lookupIpAddress = null;
++for (var dev in ifaces) {
++    if (dev != "eth0" && dev != "eth1") {
++        continue;
 +    }
++    ifaces[dev].forEach(function (details) {
++        if (details.family == 'IPv4') {
++            lookupIpAddress = details.address;
++        }
++    });
++}
 +
-     grunt.initConfig({
-         uglify: {
-             production: {
-@@ -94,22 +107,40 @@ module.exports = function (grunt) {
-                 options: {
-                     spawn: false
-                 }
--            }
-+            },
-         },
-         eslint: {
-             src: [
-                 'Gruntfile.js',
-                 'Frontend/Responsive/frontend/_public/src/js/*.js'
-             ]
--        }
++module.exports = {
++    development: {
++        bsFiles: {
++            src: [
++                '../web/cache/*.css',
++                '../web/cache/*.js'
++            ]
 +        },
-+        browserSync: {
-+            dev: {
-+                bsFiles: {
-+                    src: [
-+                        '../web/cache/*.css',
-+                        '../web/cache/*.js'
-+                    ]
-+                },
-+                options: {
-+                    watchTask: true,
-+                    reloadOnRestart: true,
-+                    ws: true,
-+                    host: lookupIpAddress,
-+                    open: 'ui'
-+                }
-+            }
-+         }
-     });
-
-     grunt.loadNpmTasks('grunt-contrib-less');
-     grunt.loadNpmTasks('grunt-contrib-uglify');
-     grunt.loadNpmTasks('grunt-chokidar');
-     grunt.loadNpmTasks('gruntify-eslint');
-+    grunt.loadNpmTasks('grunt-browser-sync');
-
-     grunt.renameTask('chokidar', 'watch');
-     grunt.registerTask('production', [ 'eslint', 'less:production', 'uglify:production' ]);
--    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
-+    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'browserSync', 'watch' ]);
++        options: {
++            watchTask: true,
++            reloadOnRestart: true,
++            ws: true,
++            host: lookupIpAddress,
++            open: 'ui'
++        }
++    }
++};
+diff --git a/themes/grunt-tasks/tasks/default.js b/themes/grunt-tasks/tasks/default.js
+--- a/themes/grunt-tasks/tasks/default.js
++++ b/themes/grunt-tasks/tasks/default.js
+@@ -1,3 +1,3 @@
+ module.exports = (grunt) => {
+-    grunt.registerTask('default', [ 'fileExists:js', 'less:development', 'uglify:development', 'chokidar' ]);
++    grunt.registerTask('default', [ 'fileExists:js', 'less:development', 'uglify:development','browserSync:development', 'chokidar' ]);
  };
-diff --git themes/package.json themes/package.json
---- themes/package.json
-+++ themes/package.json
+diff --git a/themes/package.json b/themes/package.json
+--- a/themes/package.json
++++ b/themes/package.json
 @@ -9,6 +9,7 @@
-     "eslint-plugin-promise": "^3.4.0",
-     "eslint-plugin-standard": "^2.0.1",
-     "grunt": "^0.4.5",
+     "eslint-plugin-promise": "^3.5.0",
+     "eslint-plugin-standard": "^3.0.1",
+     "grunt": "^1.0.1",
 +    "grunt-browser-sync": "^2.2.0",
      "grunt-chokidar": "^1.0.0",
-     "grunt-contrib-less": "^1.0.1",
-     "grunt-contrib-uglify": "^0.9.1",
+     "grunt-contrib-less": "^1.4.1",
+     "grunt-contrib-uglify": "^2.3.0",

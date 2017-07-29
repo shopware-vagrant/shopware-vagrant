@@ -10,6 +10,11 @@ class apt {
 		onlyif  => 'test `apt-key list | grep -c "1024D/1BB943DB"` -eq 0',
 	}
 
+	exec { 'nodejs-key':
+		command => 'wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -',
+		onlyif  => 'test `apt-key list | grep -c "4096R/68576280"` -eq 0',
+	}
+
 	if ($apt_proxy != '') {
 		file { '/etc/apt/apt.conf.d/05cacher':
 			content => "Acquire::http { Proxy \"$apt_proxy\"; };",
@@ -26,7 +31,7 @@ class apt {
 
 	exec { 'apt-update':
 		command => 'apt-get update',
-		require => [File['/etc/apt/apt.conf.d/05cacher'], File['/etc/apt/sources.list'], Exec['dotdeb-key'], Exec['mariadb-key']],
+		require => [File['/etc/apt/apt.conf.d/05cacher'], File['/etc/apt/sources.list'], Exec['dotdeb-key'], Exec['mariadb-key'], Exec['nodejs-key']],
 	}
 
 	exec { 'apt-upgrade':

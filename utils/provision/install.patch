@@ -1,8 +1,11 @@
-diff --git a/recovery/install/config/production.php b/recovery/install/config/production.php
---- a/recovery/install/config/production.php
-+++ b/recovery/install/config/production.php
-@@ -1,4 +1,21 @@
- <?php
+diff --git recovery/install/config/production.php recovery/install/config/production.php
+--- recovery/install/config/production.php
++++ recovery/install/config/production.php
+@@ -21,6 +21,24 @@
+  * trademark license. Therefore any rights, title and interest in
+  * our trademarks remain entirely with us.
+  */
++
 +if (!isset($_SESSION)) {
 +    session_cache_limiter(false);
 +    session_set_cookie_params(600);
@@ -20,10 +23,10 @@ diff --git a/recovery/install/config/production.php b/recovery/install/config/pr
 +            ]
 +        ] + $_SESSION;
 +}
+
  return [
      'shopware.root_dir' => realpath(__DIR__ . '/../../../'),
-     'check.ping_url' => 'recovery/install/ping.php',
-@@ -15,10 +32,10 @@ return [
+@@ -40,10 +58,10 @@ return [
      'menu.helper' => [
          'routes' => [
              'language-selection',

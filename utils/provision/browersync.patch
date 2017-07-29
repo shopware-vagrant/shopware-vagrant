@@ -1,7 +1,7 @@
-diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
---- a/themes/Gruntfile.js
-+++ b/themes/Gruntfile.js
-@@ -25,6 +25,19 @@ module.exports = function (grunt) {
+diff --git themes/Gruntfile.js themes/Gruntfile.js
+--- themes/Gruntfile.js
++++ themes/Gruntfile.js
+@@ -29,6 +29,19 @@ module.exports = function (grunt) {
          variables[key] = config.config[key];
      }
 
@@ -21,10 +21,19 @@ diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
      grunt.initConfig({
          uglify: {
              production: {
-@@ -103,6 +116,23 @@ module.exports = function (grunt) {
-                 '../themes/Frontend/**/_public/src/js/*.js',
-                 '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
+@@ -94,22 +107,40 @@ module.exports = function (grunt) {
+                 options: {
+                     spawn: false
+                 }
+-            }
++            },
+         },
+         eslint: {
+             src: [
+                 'Gruntfile.js',
+                 'Frontend/Responsive/frontend/_public/src/js/*.js'
              ]
+-        }
 +        },
 +        browserSync: {
 +            dev: {
@@ -42,28 +51,28 @@ diff --git a/themes/Gruntfile.js b/themes/Gruntfile.js
 +                    open: 'ui'
 +                }
 +            }
-         }
++         }
      });
 
-@@ -110,8 +140,9 @@ module.exports = function (grunt) {
+     grunt.loadNpmTasks('grunt-contrib-less');
      grunt.loadNpmTasks('grunt-contrib-uglify');
-     grunt.loadNpmTasks('grunt-contrib-jshint');
      grunt.loadNpmTasks('grunt-chokidar');
+     grunt.loadNpmTasks('gruntify-eslint');
 +    grunt.loadNpmTasks('grunt-browser-sync');
 
      grunt.renameTask('chokidar', 'watch');
-     grunt.registerTask('production', [ 'jshint', 'less:production', 'uglify:production' ]);
+     grunt.registerTask('production', [ 'eslint', 'less:production', 'uglify:production' ]);
 -    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
 +    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'browserSync', 'watch' ]);
  };
-diff --git a/themes/package.json b/themes/package.json
---- a/themes/package.json
-+++ b/themes/package.json
-@@ -2,6 +2,7 @@
-   "private": true,
-   "devDependencies": {
+diff --git themes/package.json themes/package.json
+--- themes/package.json
++++ themes/package.json
+@@ -9,6 +9,7 @@
+     "eslint-plugin-promise": "^3.4.0",
+     "eslint-plugin-standard": "^2.0.1",
      "grunt": "^0.4.5",
 +    "grunt-browser-sync": "^2.2.0",
-     "grunt-contrib-jshint": "^0.11.2",
+     "grunt-chokidar": "^1.0.0",
      "grunt-contrib-less": "^1.0.1",
      "grunt-contrib-uglify": "^0.9.1",

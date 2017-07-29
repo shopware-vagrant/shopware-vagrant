@@ -1,6 +1,6 @@
 class shopware {
 
-	package { ['npm']:
+	package { ['nodejs']:
 		ensure => present,
 	}
 
@@ -8,7 +8,7 @@ class shopware {
 		cwd     => '/usr/bin/',
 		command => 'ln -sf nodejs node;
 			npm install -g grunt-cli',
-		require => [Package['npm']],
+		require => [Package['nodejs']],
 		unless  => 'test -f /usr/local/bin/grunt',
 	}
 
@@ -29,14 +29,14 @@ class shopware {
 
 	exec { 'patch-install':
 		cwd => "${document_root}",
-		command => 'patch -p1 < /vagrant/provision/install.patch',
+		command => 'patch -p0 < /vagrant/provision/install.patch',
 		onlyif  => 'test `grep -c "config_development.php" recovery/install/config/production.php` -eq 0',
 	}
 
 	if $browsersync {
 		exec { 'patch-browsersync':
 			cwd     => "${document_root}",
-			command => 'patch -p1 < /vagrant/provision/browersync.patch',
+			command => 'patch -p0 < /vagrant/provision/browersync.patch',
 			onlyif  => 'test `grep -c "browserSync" themes/Gruntfile.js` -eq 0',
 			before  => Exec['install-grunt-local'],
 		}

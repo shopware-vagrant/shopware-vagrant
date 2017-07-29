@@ -1,7 +1,7 @@
 class tools {
 
 	exec { 'phpMyAdmin':
-		command  => 'test $(git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin;cd /usr/share/php/phpMyAdmin;cp config.sample.inc.php config.inc.php;echo \'$cfg["AllowThirdPartyFraming"] = true;$cfg["Servers"][$i]["user"] = "root";$cfg["Servers"][$i]["password"] = "password";$cfg["Servers"][$i]["auth_type"] = "config";\' >> config.inc.php) &',
+		command  => 'test $(git clone --single-branch --depth 1 --branch STABLE https://github.com/phpmyadmin/phpmyadmin.git /usr/share/php/phpMyAdmin;cd /usr/share/php/phpMyAdmin;cp config.sample.inc.php config.inc.php;echo \'$cfg["AllowThirdPartyFraming"] = true;$cfg["Servers"][$i]["user"] = "root";$cfg["Servers"][$i]["password"] = "password";$cfg["Servers"][$i]["auth_type"] = "config";\' >> config.inc.php;HOME=/root/ composer install --no-dev --no-interaction --optimize-autoloader --no-suggest --ignore-platform-reqs) &',
 		unless   => 'test -f /usr/share/php/phpMyAdmin/index.php',
 		require  => Package['php-pear'],
 	}
@@ -74,7 +74,8 @@ class tools {
 
 
 	file { '/usr/share/php/GruntLog.php':
-		content => template('tools/GruntLog.php')
+		content => template('tools/GruntLog.php'),
+		require  => Package['php-pear'],
 	}
 
 	file { ['/usr/share/php/roundcubemail/temp', '/usr/share/php/roundcubemail/logs']:
